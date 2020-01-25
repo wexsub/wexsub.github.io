@@ -197,18 +197,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-26 01:41:20 / 修改时间：04:42:49" itemprop="dateCreated datePublished" datetime="2020-01-26T01:41:20+08:00">2020-01-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/离散数学/" itemprop="url" rel="index">
-                    <span itemprop="name">离散数学</span>
-                  </a>
-                </span>
+              <time title="创建时间：2020-01-26 01:41:20 / 修改时间：04:47:26" itemprop="dateCreated datePublished" datetime="2020-01-26T01:41:20+08:00">2020-01-26</time>
             </span>
 
           
@@ -228,31 +217,31 @@
 “p仅当q”和“q除非\neg p”\\ 请记住“p仅当q”表达了与“如果p, 则q”同样的意思， 注意“p仅当q”说的是当q不为真时p不能为真。\\ 也就是说，如果p为真但q为假，则这个语句为假。\\ 当p为假时，q可以为真也可以为假，因为语句并没有谈及q的真值。\\ 要小心不要用“q仅当p”来表达p\rightarrow q, 因为这是错误的。\\ 要明白这一点，请注意当p和q取不同的真值时，“q仅当p”和p\rightarrow q的真值是不
 同的。\\ 请记住“q除非\neg p“表达了和p\rightarrow q条件语句一样的意思，\\ 注意“q除非\neg p”的意思是如果\neg p是假的，则q必是真的。\\ 也就是说，当p为真，而q为假时，语句“q除非\neg p”是假的，否则是真的。\\ 因此， “q除非\neg p”与p\rightarrow q总是具有相同的真值。</script><h1 id="2-重要的逻辑等价式"><a href="#2-重要的逻辑等价式" class="headerlink" title="2.重要的逻辑等价式"></a>2.重要的逻辑等价式</h1><script type="math/tex; mode=display">
 结合律：\\ 
-(p\or q)\or r\equiv p\or(q\or r)\\
-(p\and q)\and r\equiv p\and(q\and r)\\
+(p\vee q)\vee r\equiv p\vee(q\vee r)\\
+(p\wedge q)\wedge r\equiv p\wedge(q\wedge r)\\
 分配律(良定义)：\\
-p\or(q\and r)\equiv (p\or q)\and(p\or r)\\
-p\and(q\or r)\equiv (p\and q)\or(p\and r)\\
+p\vee(q\wedge r)\equiv (p\vee q)\wedge(p\vee r)\\
+p\wedge(q\vee r)\equiv (p\wedge q)\vee(p\wedge r)\\
 徳·摩根律：\\
-\neg(p\and q)\equiv \neg p \or \neg q\\
-\neg(p\or q)\equiv \neg p \and \neg q\\
+\neg(p\wedge q)\equiv \neg p \vee \neg q\\
+\neg(p\vee q)\equiv \neg p \wedge \neg q\\
 \neg (\bigvee_{j=1}^{n}p_{j})\equiv\bigwedge_{j=1}^{n}\neg p_{j}\\
 \neg (\bigwedge_{j=1}^{n}p_{j})\equiv\bigvee_{j=1}^{n}\neg p_{j}\\
 吸收律：\\
-p\and (p \or q)\equiv p\\
-p\or (p \and q)\equiv p</script><h2 id="条件命题的逻辑等价式："><a href="#条件命题的逻辑等价式：" class="headerlink" title="条件命题的逻辑等价式："></a>条件命题的逻辑等价式：</h2><script type="math/tex; mode=display">
-p\rightarrow q\equiv\neg p\or q\\
+p\wedge (p \vee q)\equiv p\\
+p\vee (p \wedge q)\equiv p</script><h2 id="条件命题的逻辑等价式："><a href="#条件命题的逻辑等价式：" class="headerlink" title="条件命题的逻辑等价式："></a>条件命题的逻辑等价式：</h2><script type="math/tex; mode=display">
+p\rightarrow q\equiv\neg p\vee q\\
 p\rightarrow q\equiv\neg q\rightarrow\neg p\\
-p\or q\equiv \neg p\rightarrow q\\
-p\and q\equiv \neg(p\rightarrow \neg q)\\
-\neg(p\rightarrow q)\equiv p\and\neg q\\
-(p\rightarrow q)\and(p\rightarrow r)\equiv p\rightarrow(q\and r)\\
-(p\rightarrow r)\and(q\rightarrow r)\equiv (p\or q)\rightarrow r\\
-(p\rightarrow q)\or(p\rightarrow r)\equiv p\rightarrow(q\or r)\\
-(p\rightarrow r)\or(q\rightarrow r)\equiv (p\and q)\rightarrow r</script><h2 id="双条件命题的逻辑等价式："><a href="#双条件命题的逻辑等价式：" class="headerlink" title="双条件命题的逻辑等价式："></a>双条件命题的逻辑等价式：</h2><script type="math/tex; mode=display">
-p\leftrightarrow q\equiv(p\to q)\and(q\to p)\\
+p\vee q\equiv \neg p\rightarrow q\\
+p\wedge q\equiv \neg(p\rightarrow \neg q)\\
+\neg(p\rightarrow q)\equiv p\wedge\neg q\\
+(p\rightarrow q)\wedge(p\rightarrow r)\equiv p\rightarrow(q\wedge r)\\
+(p\rightarrow r)\wedge(q\rightarrow r)\equiv (p\vee q)\rightarrow r\\
+(p\rightarrow q)\vee(p\rightarrow r)\equiv p\rightarrow(q\vee r)\\
+(p\rightarrow r)\vee(q\rightarrow r)\equiv (p\wedge q)\rightarrow r</script><h2 id="双条件命题的逻辑等价式："><a href="#双条件命题的逻辑等价式：" class="headerlink" title="双条件命题的逻辑等价式："></a>双条件命题的逻辑等价式：</h2><script type="math/tex; mode=display">
+p\leftrightarrow q\equiv(p\to q)\wedge(q\to p)\\
 p\leftrightarrow q\equiv\neg p\leftrightarrow\neg q\\
-p\leftrightarrow q\equiv(p\and q)\or(\neg p\and \neg q)\\
+p\leftrightarrow q\equiv(p\wedge q)\vee(\neg p\wedge \neg q)\\
 \neg(p\leftrightarrow q)\equiv p\leftrightarrow\neg q</script><p>​    命题逻辑学深了的话，会很难，但也很有用。后面的数独解法在过完算法一章后，看能不能写个报告，早知道大作业做这个了。</p>
 
       
