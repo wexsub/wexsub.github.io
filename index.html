@@ -172,6 +172,242 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/linux下的解压缩/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/13/linux下的解压缩/" class="post-title-link" itemprop="url">linux下的解压缩</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-13 19:55:32 / 修改时间：20:14:01" itemprop="dateCreated datePublished" datetime="2020-02-13T19:55:32+08:00">2020-02-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="linux下解压缩命令小结"><a href="#linux下解压缩命令小结" class="headerlink" title="linux下解压缩命令小结"></a>linux下解压缩命令小结</h1><h2 id="综述："><a href="#综述：" class="headerlink" title="综述："></a>综述：</h2><p>linux下解压缩工具包括tar、gzip、gunzip、bzip2、bunzip2、compress 、uncompress、 zip、 unzip、rar、unrar等，压缩文件共有.tar、.gz 、.tar.gz、.tgz、.bz2、.tar.bz2、.Z、. tar.Z、.zip、.rar这10中格式。</p>
+<h2 id="tar："><a href="#tar：" class="headerlink" title="tar："></a>tar：</h2><p>Linux下最常用的打包程序就是tar了，使用tar程序打出来的包我们常称为tar包，tar包文件的命令通常都是以.tar结尾的。生成tar包后，就可以用其它的程序来进行压缩了，所以首先就来讲讲tar命令的基本用法：</p>
+<p>tar命令的选项有很多(用<code>man tar</code>可以查看到)，但常用的就那么几个选项，下面来举例说明一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -cf all.tar *.jpg</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.jpg的文件打成一个名为all.tar的包。-c是表示产生新的包 ，-f指定包的文件名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -rf all.tar *.gif</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.gif的文件增加到all.tar的包里面去。-r是表示增加文件的意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -uf all.tar logo.gif</span><br></pre></td></tr></table></figure>
+<p>这条命令是更新原来tar包all.tar中logo.gif文件，-u是表示更新文件的意思。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># tar -tf all.tar</span><br></pre></td></tr></table></figure>
+<p>这条命令是列出all.tar包中所有文件，-t是列出文件的意思</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># tar -xf all.tar</span><br></pre></td></tr></table></figure>
+<p>这条命令是解出all.tar包中所有文件，-x是解开的意思</p>
+<p>以上就是tar的最基本的用法。为了方便用户在打包解包的同时可以压缩或解压文件，tar提供了一种特殊的功能。这就是tar可以在打包或解包的同时调用其它的压缩程序，比如调用gzip、bzip2等。</p>
+<h3 id="1-tar调用gzip"><a href="#1-tar调用gzip" class="headerlink" title="1) tar调用gzip"></a>1) tar调用gzip</h3><p>gzip是GNU组织开发的一个压缩程序，<code>.gz</code>结尾的文件就是gzip压缩的结果。与gzip 相对的解压程序是gunzip。tar中使用-z这个参数来调用gzip。下面来举例说明一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -czf all.tar.gz *.jpg</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.jpg的文件打成一个tar包，并且将其用gzip压缩，生成一个gzip压缩过的包，包名为all.tar.gz</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzf all.tar.gz</span><br></pre></td></tr></table></figure>
+<p>这条命令是将上面产生的包解开。</p>
+<h3 id="2-tar调用bzip2"><a href="#2-tar调用bzip2" class="headerlink" title="2) tar调用bzip2"></a>2) tar调用bzip2</h3><p>bzip2是一个压缩能力更强的压缩程序，.bz2结尾的文件就是bzip2压缩的结果。</p>
+<p>与bzip2相对的解压程序是bunzip2。tar中使用-j这个参数来调用gzip。下面来举例说明一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -cjf all.tar.bz2 *.jpg</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.jpg的文件打成一个tar包，并且将其用bzip2压缩，生成一个bzip2压缩过的包，包名为all.tar.bz2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xjf all.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>这条命令是将上面产生的包解开。</p>
+<p><strong>3)tar调用compress</strong> </p>
+<p>compress也是一个压缩程序，但是好象使用compress的人不如gzip和bzip2的人多。.Z结尾的文件就是bzip2压缩的结果。与 compress相对的解压程序是uncompress。tar中使用-Z这个参数来调用compress。下面来举例说明一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -cZf all.tar.Z *.jpg</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.jpg的文件打成一个tar包，并且将其用compress压缩，生成一个uncompress压缩过的包，包名为all.tar.Z</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xZf all.tar.Z</span><br></pre></td></tr></table></figure>
+<p>这条命令是将上面产生的包解开</p>
+<p><strong>有了上面的知识，我们可以解开多种压缩文件了，下面对于tar系列的压缩文件作一个小结</strong>：</p>
+<p>1)对于.tar结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xf all.tar</span><br></pre></td></tr></table></figure>
+<p>2)对于.gz结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gzip -d all.gz</span><br><span class="line"></span><br><span class="line">gunzip all.gz</span><br></pre></td></tr></table></figure>
+<p>3)对于.tgz或.tar.gz结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzf all.tar.gz</span><br><span class="line"></span><br><span class="line">tar -xzf all.tgz</span><br></pre></td></tr></table></figure>
+<p>4)对于.bz2结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bzip2 -d all.bz2</span><br><span class="line"></span><br><span class="line">bunzip2 all.bz2</span><br></pre></td></tr></table></figure>
+<p>5)对于tar.bz2结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xjf all.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>6)对于.Z结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uncompress all.Z</span><br></pre></td></tr></table></figure>
+<p>7)对于.tar.Z结尾的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xZf all.tar.z</span><br></pre></td></tr></table></figure>
+<p>另外对于Window下的常见压缩文件.zip和.rar，Linux也有相应的方法来解压它们：</p>
+<h2 id="对于-zip"><a href="#对于-zip" class="headerlink" title="对于.zip"></a>对于.zip</h2><p>linux下提供了zip和unzip程序，zip是压缩程序，unzip是解压程序。它们的参数选项很多，这里只做简单介绍，依旧举例说明一下其用法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip all.zip *.jpg</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.jpg的文件压缩成一个zip包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip all.zip</span><br></pre></td></tr></table></figure>
+<p>这条命令是将all.zip中的所有文件解压出来</p>
+<h2 id="对于-rar"><a href="#对于-rar" class="headerlink" title="对于.rar"></a>对于.rar</h2><p>要在linux下处理.rar文件，需要安装RAR for Linux，可以从网上下载，但要记住，RAR for Linux 不是免费的；可从<a href="http://www.rarsoft.com/download.htm下载RARfor" target="_blank" rel="noopener">http://www.rarsoft.com/download.htm下载RARfor</a> Linux 3.2.<br> 0，然后安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xzpvf rarlinux-3.2.0.tar.gz  </span><br><span class="line">cd rar </span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>这样就安装好了，安装后就有了rar和unrar这两个程序，rar是压缩程序，unrar 是解压程序。它们的参数选项很多，这里只做简单介绍，依旧举例说明一下其用法： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rar a all *.jpg</span><br></pre></td></tr></table></figure>
+<p>这条命令是将所有.jpg的文件压缩成一个rar包，名为all.rar，该程序会将.rar 扩展名将自动附加到包名后。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># unrar e all.rar</span><br></pre></td></tr></table></figure>
+<p>这条命令是将all.rar中的所有文件解压出来</p>
+<h2 id="以下补充"><a href="#以下补充" class="headerlink" title="以下补充"></a>以下补充</h2><h3 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-c: 建立压缩档案 </span><br><span class="line">-x：解压 </span><br><span class="line">-t：查看内容 </span><br><span class="line">-r：向压缩归档文件末尾追加文件 </span><br><span class="line">-u：更新原压缩包中的文件</span><br></pre></td></tr></table></figure>
+<p>这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-z：有gzip属性的 </span><br><span class="line">-j：有bz2属性的 </span><br><span class="line">-Z：有compress属性的 </span><br><span class="line">-v：显示所有过程 </span><br><span class="line">-O：将文件解开到标准输出</span><br></pre></td></tr></table></figure>
+<p>下面的参数-f是必须的</p>
+<p>-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。 </p>
+<p><strong>压缩 
+</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar –cvf jpg.tar *.jpg //将目录里所有jpg文件打包成tar.jpg </span><br><span class="line">tar –czf jpg.tar.gz *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz </span><br><span class="line">tar –cjf jpg.tar.bz2 *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2 </span><br><span class="line">tar –cZf jpg.tar.Z *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z </span><br><span class="line">rar a jpg.rar *.jpg //rar格式的压缩，需要先下载rar for linux </span><br><span class="line">zip jpg.zip *.jpg //zip格式的压缩，需要先下载zip for linux</span><br></pre></td></tr></table></figure>
+<p><strong>解压</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar –xvf file.tar //解压 tar包 </span><br><span class="line">tar -xzvf file.tar.gz //解压tar.gz </span><br><span class="line">tar -xjvf file.tar.bz2 //解压 tar.bz2 </span><br><span class="line">tar –xZvf file.tar.Z //解压tar.Z </span><br><span class="line">unrar e file.rar //解压rar </span><br><span class="line">unzip file.zip //解压zip</span><br></pre></td></tr></table></figure>
+<p><strong>总结</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1、.tar 用 tar –xvf 解压 </span><br><span class="line">2、.gz 用 gzip -d或者gunzip 解压 </span><br><span class="line">3、.tar.gz和*.tgz 用 tar –xzf 解压 </span><br><span class="line">4、.bz2 用 bzip2 -d或者用bunzip2 解压 </span><br><span class="line">5、.tar.bz2用tar –xjf 解压 </span><br><span class="line">6、.Z 用 uncompress 解压 </span><br><span class="line">7、.tar.Z 用tar –xZf 解压 </span><br><span class="line">8、.rar 用 unrar e解压 </span><br><span class="line">9、.zip 用 unzip 解压</span><br></pre></td></tr></table></figure>
+<h2 id="参考（抄）链接："><a href="#参考（抄）链接：" class="headerlink" title="参考（抄）链接："></a>参考（抄）链接：</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/wget/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/13/wget/" class="post-title-link" itemprop="url">wget</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-13 19:31:28 / 修改时间：19:55:06" itemprop="dateCreated datePublished" datetime="2020-02-13T19:31:28+08:00">2020-02-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h1><h2 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h2><p>wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。</p>
+<h2 id="语法："><a href="#语法：" class="headerlink" title="语法："></a>语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget(选项)(参数)</span><br></pre></td></tr></table></figure>
+<h2 id="选项："><a href="#选项：" class="headerlink" title="选项："></a>选项：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-a&lt;日志文件&gt;：在指定的日志文件中记录资料的执行过程；</span><br><span class="line">-A&lt;后缀名&gt;：指定要下载文件的后缀名，多个后缀名之间使用逗号进行分隔；</span><br><span class="line">-b：进行后台的方式运行wget；</span><br><span class="line">-B&lt;连接地址&gt;：设置参考的连接地址的基地地址；</span><br><span class="line">-c：继续执行上次终端的任务；</span><br><span class="line">-C&lt;标志&gt;：设置服务器数据块功能标志on为激活，off为关闭，默认值为on；</span><br><span class="line">-d：调试模式运行指令；</span><br><span class="line">-D&lt;域名列表&gt;：设置顺着的域名列表，域名之间用“，”分隔；</span><br><span class="line">-e&lt;指令&gt;：作为文件“.wgetrc”中的一部分执行指定的指令；</span><br><span class="line">-h：显示指令帮助信息；</span><br><span class="line">-i&lt;文件&gt;：从指定文件获取要下载的URL地址；</span><br><span class="line">-l&lt;目录列表&gt;：设置顺着的目录列表，多个目录用“，”分隔；</span><br><span class="line">-L：仅顺着关联的连接；</span><br><span class="line">-r：递归下载方式；</span><br><span class="line">-nc：文件存在时，下载文件不覆盖原有文件；</span><br><span class="line">-nv：下载时只显示更新和出错信息，不显示指令的详细执行过程；</span><br><span class="line">-o: 指定文件名；</span><br><span class="line">-q：不显示指令执行过程；</span><br><span class="line">-nh：不查询主机名称；</span><br><span class="line">-v：显示详细执行过程；</span><br><span class="line">-V：显示版本信息；</span><br><span class="line">--passive-ftp：使用被动模式PASV连接FTP服务器；</span><br><span class="line">--follow-ftp：从HTML文件中下载FTP连接文件。</span><br><span class="line">--limit-rate=：限速；</span><br></pre></td></tr></table></figure>
+<h2 id="参数："><a href="#参数：" class="headerlink" title="参数："></a>参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL： 下载指定的URL地址</span><br></pre></td></tr></table></figure>
+<h2 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h2><h3 id="o（下载并以不同的文件名保存）："><a href="#o（下载并以不同的文件名保存）：" class="headerlink" title="-o（下载并以不同的文件名保存）："></a>-o（下载并以不同的文件名保存）：</h3><p>一般来说，wget会以最后一个符合<code>/</code>的后面的字符来命令，对于<strong>动态链接</strong>的下载通常文件名会不正确。</p>
+<p>比如说下面的例子会下载一个文件并以名称<code>download.aspx?id=1080</code>保存:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.***.com/download?id=1</span><br></pre></td></tr></table></figure>
+<p>为了解决这个问题，我们可以使用参数<code>-O</code>来指定一个文件名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O ***.zip http://www.***.com/download?id=1</span><br></pre></td></tr></table></figure>
+<h3 id="—limit-rate-（限速）："><a href="#—limit-rate-（限速）：" class="headerlink" title="—limit-rate=（限速）："></a>—limit-rate=（限速）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --limit-rate=300k http://www.***.com/testfile.zip</span><br></pre></td></tr></table></figure>
+<p>当你执行wget的时候，它默认会占用全部可能的宽带下载。但是当你准备下载一个大文件，而你还需要下载其它文件时就有必要限速了。</p>
+<h3 id="c（断点续传）："><a href="#c（断点续传）：" class="headerlink" title="-c（断点续传）："></a>-c（断点续传）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -c http://www.linuxde.net/testfile.zip</span><br></pre></td></tr></table></figure>
+<p>使用<code>wget -c</code>重新启动下载中断的文件，对于我们下载大文件时突然由于网络等原因中断非常有帮助，我们可以继续接着下载而不是重新下载一个文件。需要继续中断的下载时可以使用<code>-c</code>参数。</p>
+<h3 id="i（下载多个文件）："><a href="#i（下载多个文件）：" class="headerlink" title="-i（下载多个文件）："></a>-i（下载多个文件）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -i filelist.txt</span><br></pre></td></tr></table></figure>
+<p>首先，保存一份下载链接文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; filelist.txt</span><br><span class="line">url1</span><br><span class="line">url2</span><br><span class="line">url3</span><br><span class="line">url4</span><br></pre></td></tr></table></figure>
+<p>接着使用这个文件和参数<code>-i</code>下载。</p>
+<h3 id="镜像网站："><a href="#镜像网站：" class="headerlink" title="镜像网站："></a>镜像网站：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --mirror -p --convert-links -P ./LOCAL URL</span><br></pre></td></tr></table></figure>
+<p> 下载整个网站到本地。</p>
+<ul>
+<li><code>--miror</code>开户镜像下载。</li>
+<li><code>-p</code>下载所有为了html页面显示正常的文件。</li>
+<li><code>--convert-links</code>下载后，转换成本地的链接。</li>
+<li><code>-P ./LOCAL</code>保存所有文件和目录到本地指定目录。</li>
+</ul>
+<h3 id="过滤指定格式下载："><a href="#过滤指定格式下载：" class="headerlink" title="过滤指定格式下载："></a>过滤指定格式下载：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --reject=gif ur</span><br></pre></td></tr></table></figure>
+<p> 下载一个网站，但你不希望下载图片，可以使用这条命令。</p>
+<h2 id="参考（抄）网址："><a href="#参考（抄）网址：" class="headerlink" title="参考（抄）网址："></a>参考（抄）网址：</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/30/两种计算模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -937,19 +1173,19 @@ ppm(10^{-6}),ppb(10^{-9}),ppt</script><h4 id="溶液的分类和特征："><a hr
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

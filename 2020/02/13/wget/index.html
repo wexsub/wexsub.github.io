@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="wget介绍：wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。 语法：1wget(选项)(参数) 选项：123456789101112131">
+<meta name="keywords" content="linux,linux命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wget">
+<meta property="og:url" content="http://yoursite.com/2020/02/13/wget/index.html">
+<meta property="og:site_name" content="Wexsub&#39;s blog">
+<meta property="og:description" content="wget介绍：wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。 语法：1wget(选项)(参数) 选项：123456789101112131">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-13T11:55:06.059Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="wget">
+<meta name="twitter:description" content="wget介绍：wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。 语法：1wget(选项)(参数) 选项：123456789101112131">
+
+<link rel="canonical" href="http://yoursite.com/2020/02/13/wget/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>wget | Wexsub's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Wexsub's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/wget/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          wget
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-13 19:31:28 / 修改时间：19:55:06" itemprop="dateCreated datePublished" datetime="2020-02-13T19:31:28+08:00">2020-02-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h1><h2 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h2><p>wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。</p>
+<h2 id="语法："><a href="#语法：" class="headerlink" title="语法："></a>语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget(选项)(参数)</span><br></pre></td></tr></table></figure>
+<h2 id="选项："><a href="#选项：" class="headerlink" title="选项："></a>选项：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-a&lt;日志文件&gt;：在指定的日志文件中记录资料的执行过程；</span><br><span class="line">-A&lt;后缀名&gt;：指定要下载文件的后缀名，多个后缀名之间使用逗号进行分隔；</span><br><span class="line">-b：进行后台的方式运行wget；</span><br><span class="line">-B&lt;连接地址&gt;：设置参考的连接地址的基地地址；</span><br><span class="line">-c：继续执行上次终端的任务；</span><br><span class="line">-C&lt;标志&gt;：设置服务器数据块功能标志on为激活，off为关闭，默认值为on；</span><br><span class="line">-d：调试模式运行指令；</span><br><span class="line">-D&lt;域名列表&gt;：设置顺着的域名列表，域名之间用“，”分隔；</span><br><span class="line">-e&lt;指令&gt;：作为文件“.wgetrc”中的一部分执行指定的指令；</span><br><span class="line">-h：显示指令帮助信息；</span><br><span class="line">-i&lt;文件&gt;：从指定文件获取要下载的URL地址；</span><br><span class="line">-l&lt;目录列表&gt;：设置顺着的目录列表，多个目录用“，”分隔；</span><br><span class="line">-L：仅顺着关联的连接；</span><br><span class="line">-r：递归下载方式；</span><br><span class="line">-nc：文件存在时，下载文件不覆盖原有文件；</span><br><span class="line">-nv：下载时只显示更新和出错信息，不显示指令的详细执行过程；</span><br><span class="line">-o: 指定文件名；</span><br><span class="line">-q：不显示指令执行过程；</span><br><span class="line">-nh：不查询主机名称；</span><br><span class="line">-v：显示详细执行过程；</span><br><span class="line">-V：显示版本信息；</span><br><span class="line">--passive-ftp：使用被动模式PASV连接FTP服务器；</span><br><span class="line">--follow-ftp：从HTML文件中下载FTP连接文件。</span><br><span class="line">--limit-rate=：限速；</span><br></pre></td></tr></table></figure>
+<h2 id="参数："><a href="#参数：" class="headerlink" title="参数："></a>参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL： 下载指定的URL地址</span><br></pre></td></tr></table></figure>
+<h2 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h2><h3 id="o（下载并以不同的文件名保存）："><a href="#o（下载并以不同的文件名保存）：" class="headerlink" title="-o（下载并以不同的文件名保存）："></a>-o（下载并以不同的文件名保存）：</h3><p>一般来说，wget会以最后一个符合<code>/</code>的后面的字符来命令，对于<strong>动态链接</strong>的下载通常文件名会不正确。</p>
+<p>比如说下面的例子会下载一个文件并以名称<code>download.aspx?id=1080</code>保存:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.***.com/download?id=1</span><br></pre></td></tr></table></figure>
+<p>为了解决这个问题，我们可以使用参数<code>-O</code>来指定一个文件名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O ***.zip http://www.***.com/download?id=1</span><br></pre></td></tr></table></figure>
+<h3 id="—limit-rate-（限速）："><a href="#—limit-rate-（限速）：" class="headerlink" title="—limit-rate=（限速）："></a>—limit-rate=（限速）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --limit-rate=300k http://www.***.com/testfile.zip</span><br></pre></td></tr></table></figure>
+<p>当你执行wget的时候，它默认会占用全部可能的宽带下载。但是当你准备下载一个大文件，而你还需要下载其它文件时就有必要限速了。</p>
+<h3 id="c（断点续传）："><a href="#c（断点续传）：" class="headerlink" title="-c（断点续传）："></a>-c（断点续传）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -c http://www.linuxde.net/testfile.zip</span><br></pre></td></tr></table></figure>
+<p>使用<code>wget -c</code>重新启动下载中断的文件，对于我们下载大文件时突然由于网络等原因中断非常有帮助，我们可以继续接着下载而不是重新下载一个文件。需要继续中断的下载时可以使用<code>-c</code>参数。</p>
+<h3 id="i（下载多个文件）："><a href="#i（下载多个文件）：" class="headerlink" title="-i（下载多个文件）："></a>-i（下载多个文件）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -i filelist.txt</span><br></pre></td></tr></table></figure>
+<p>首先，保存一份下载链接文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; filelist.txt</span><br><span class="line">url1</span><br><span class="line">url2</span><br><span class="line">url3</span><br><span class="line">url4</span><br></pre></td></tr></table></figure>
+<p>接着使用这个文件和参数<code>-i</code>下载。</p>
+<h3 id="镜像网站："><a href="#镜像网站：" class="headerlink" title="镜像网站："></a>镜像网站：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --mirror -p --convert-links -P ./LOCAL URL</span><br></pre></td></tr></table></figure>
+<p> 下载整个网站到本地。</p>
+<ul>
+<li><code>--miror</code>开户镜像下载。</li>
+<li><code>-p</code>下载所有为了html页面显示正常的文件。</li>
+<li><code>--convert-links</code>下载后，转换成本地的链接。</li>
+<li><code>-P ./LOCAL</code>保存所有文件和目录到本地指定目录。</li>
+</ul>
+<h3 id="过滤指定格式下载："><a href="#过滤指定格式下载：" class="headerlink" title="过滤指定格式下载："></a>过滤指定格式下载：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --reject=gif ur</span><br></pre></td></tr></table></figure>
+<p> 下载一个网站，但你不希望下载图片，可以使用这条命令。</p>
+<h2 id="参考（抄）网址："><a href="#参考（抄）网址：" class="headerlink" title="参考（抄）网址："></a>参考（抄）网址：</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/linux命令/" rel="tag"># linux命令</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/01/30/两种计算模型/" rel="prev" title="两种计算模型">
+      <i class="fa fa-chevron-left"></i> 两种计算模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/13/linux下的解压缩/" rel="next" title="linux下的解压缩">
+      linux下的解压缩 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wget"><span class="nav-number">1.</span> <span class="nav-text">wget</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍："><span class="nav-number">1.1.</span> <span class="nav-text">介绍：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法："><span class="nav-number">1.2.</span> <span class="nav-text">语法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选项："><span class="nav-number">1.3.</span> <span class="nav-text">选项：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数："><span class="nav-number">1.4.</span> <span class="nav-text">参数：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例："><span class="nav-number">1.5.</span> <span class="nav-text">实例：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#o（下载并以不同的文件名保存）："><span class="nav-number">1.5.1.</span> <span class="nav-text">-o（下载并以不同的文件名保存）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#—limit-rate-（限速）："><span class="nav-number">1.5.2.</span> <span class="nav-text">—limit-rate=（限速）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c（断点续传）："><span class="nav-number">1.5.3.</span> <span class="nav-text">-c（断点续传）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#i（下载多个文件）："><span class="nav-number">1.5.4.</span> <span class="nav-text">-i（下载多个文件）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像网站："><span class="nav-number">1.5.5.</span> <span class="nav-text">镜像网站：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤指定格式下载："><span class="nav-number">1.5.6.</span> <span class="nav-text">过滤指定格式下载：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考（抄）网址："><span class="nav-number">1.6.</span> <span class="nav-text">参考（抄）网址：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wexsub</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wexsub</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
