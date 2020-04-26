@@ -48,20 +48,20 @@
   };
 </script>
 
-  <meta name="description" content="c++1x新特性： 1.auto 2.lamda表达式 3.右值引用 4.std::thread 5.std::regex 6.编译：g++ main.cpp -std=c++14 弃用特性： 1.如果一个类有析构函数，为其生成拷贝构造函数和拷贝赋值运算符的特性被弃用了。 2.不再允许字符串字面值常量赋值给一个 char *。如果需要用字符串字面值常量赋值和初始化一个 char *，应该使用 co">
+  <meta name="description" content="初始化列表：初始化是一个非常重要的语言特性，最常见的就是对对象进行初始化。在传统 C++ 中，不同的对象有着不同的初始化方法，例如普通数组、POD （plain old data，没有构造、析构和虚函数的类或结构体）类型都可以使用 {} 进行初始化，也就是我们所说的初始化列表。而对于类对象的初始化，要么需要通过拷贝构造、要么就需要使用 () 进行。这些不同方法都针对各自对象，不能通用。 12345">
 <meta name="keywords" content="实验楼">
 <meta property="og:type" content="article">
-<meta property="og:title" content="c++1x">
-<meta property="og:url" content="http://yoursite.com/2020/04/26/c-1x/index.html">
+<meta property="og:title" content="cpp1x_4">
+<meta property="og:url" content="http://yoursite.com/2020/04/26/cpp1x-4/index.html">
 <meta property="og:site_name" content="Wexsub&#39;s blog">
-<meta property="og:description" content="c++1x新特性： 1.auto 2.lamda表达式 3.右值引用 4.std::thread 5.std::regex 6.编译：g++ main.cpp -std=c++14 弃用特性： 1.如果一个类有析构函数，为其生成拷贝构造函数和拷贝赋值运算符的特性被弃用了。 2.不再允许字符串字面值常量赋值给一个 char *。如果需要用字符串字面值常量赋值和初始化一个 char *，应该使用 co">
+<meta property="og:description" content="初始化列表：初始化是一个非常重要的语言特性，最常见的就是对对象进行初始化。在传统 C++ 中，不同的对象有着不同的初始化方法，例如普通数组、POD （plain old data，没有构造、析构和虚函数的类或结构体）类型都可以使用 {} 进行初始化，也就是我们所说的初始化列表。而对于类对象的初始化，要么需要通过拷贝构造、要么就需要使用 () 进行。这些不同方法都针对各自对象，不能通用。 12345">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-26T02:24:17.134Z">
+<meta property="og:updated_time" content="2020-04-26T03:03:57.559Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="c++1x">
-<meta name="twitter:description" content="c++1x新特性： 1.auto 2.lamda表达式 3.右值引用 4.std::thread 5.std::regex 6.编译：g++ main.cpp -std=c++14 弃用特性： 1.如果一个类有析构函数，为其生成拷贝构造函数和拷贝赋值运算符的特性被弃用了。 2.不再允许字符串字面值常量赋值给一个 char *。如果需要用字符串字面值常量赋值和初始化一个 char *，应该使用 co">
+<meta name="twitter:title" content="cpp1x_4">
+<meta name="twitter:description" content="初始化列表：初始化是一个非常重要的语言特性，最常见的就是对对象进行初始化。在传统 C++ 中，不同的对象有着不同的初始化方法，例如普通数组、POD （plain old data，没有构造、析构和虚函数的类或结构体）类型都可以使用 {} 进行初始化，也就是我们所说的初始化列表。而对于类对象的初始化，要么需要通过拷贝构造、要么就需要使用 () 进行。这些不同方法都针对各自对象，不能通用。 12345">
 
-<link rel="canonical" href="http://yoursite.com/2020/04/26/c-1x/">
+<link rel="canonical" href="http://yoursite.com/2020/04/26/cpp1x-4/">
 
 
 <script id="page-configurations">
@@ -73,7 +73,7 @@
   };
 </script>
 
-  <title>c++1x | Wexsub's blog</title>
+  <title>cpp1x_4 | Wexsub's blog</title>
   
 
 
@@ -177,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/c-1x/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/cpp1x-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -190,7 +190,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          c++1x
+          cpp1x_4
         </h1>
 
         <div class="post-meta">
@@ -201,7 +201,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-26 09:11:14 / 修改时间：10:24:17" itemprop="dateCreated datePublished" datetime="2020-04-26T09:11:14+08:00">2020-04-26</time>
+              <time title="创建时间：2020-04-26 10:52:08 / 修改时间：11:03:57" itemprop="dateCreated datePublished" datetime="2020-04-26T10:52:08+08:00">2020-04-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -226,35 +226,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>c++1x新特性：</p>
-<p>1.auto</p>
-<p>2.lamda表达式</p>
-<p>3.右值引用</p>
-<p>4.std::thread</p>
-<p>5.std::regex</p>
-<p>6.编译：g++ main.cpp -std=c++14</p>
-<p>弃用特性：</p>
-<p>1.如果一个类有析构函数，为其生成拷贝构造函数和拷贝赋值运算符的特性被弃用了。</p>
-<p>2.不再允许字符串字面值常量赋值给一个 <code>char *</code>。如果需要用字符串字面值常量赋值和初始化一个 <code>char *</code>，应该使用 <code>const char *</code> 或者 <code>auto</code>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *str = <span class="string">"hello world!"</span>; <span class="comment">// 将出现弃用警告</span></span><br></pre></td></tr></table></figure>
-<p>3.C++98 异常说明、 <code>unexpected_handler</code>、<code>set_unexpected()</code> 等相关特性被弃用，应该使用 <code>noexcept</code>。</p>
-<p>4.<code>auto_ptr</code> 被弃用，应使用 <code>unique_ptr</code>。</p>
-<p>5.<code>register</code> 关键字被弃用。</p>
-<p>6.<code>bool</code> 类型的 <code>++</code> 操作被弃用。</p>
-<p>7.C 语言风格的类型转换被弃用，应该使用 <code>static_cast</code>、<code>reinterpret_cast</code>、<code>const_cast</code> 来进行类型转换。</p>
-<p>还有一些其他诸如参数绑定（C++11 提供了 <code>std::bind</code> 和 <code>std::function</code>）、<code>export</code> 等特性也均被弃用。</p>
-<p><strong>C++ 不是 C 的一个超集</strong>：</p>
-<p>在编写 C++ 时，应该尽可能的避免使用诸如 <code>void*</code> 之类的程序风格。而在不得不使用 C 时，应该注意使用 <code>extern &quot;C&quot;</code> 这种特性，将 C 语言的代码与 C++ 代码进行分离编译，再统一链接这种做法，例如：</p>
-<p>头文件 <code>foo.h</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<p>源文件 <code>foo.c</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>源文件 <code>main.cpp</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"foo.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    add(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>应先使用 <code>gcc</code> 编译 C 语言的代码：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -c foo.c</span><br></pre></td></tr></table></figure>
-<p>编译出 foo.o 文件，再使用 <code>g++</code> 将 C++代码和 <code>.o</code> 文件链接起来（或者都编译为 <code>.o</code> 再统一链接）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ main.cpp foo.o -o main</span><br></pre></td></tr></table></figure>
+        <h1 id="初始化列表："><a href="#初始化列表：" class="headerlink" title="初始化列表："></a>初始化列表：</h1><p>初始化是一个非常重要的语言特性，最常见的就是对对象进行初始化。在传统 C++ 中，不同的对象有着不同的初始化方法，例如普通数组、POD （plain old data，没有构造、析构和虚函数的类或结构体）类型都可以使用 <code>{}</code> 进行初始化，也就是我们所说的初始化列表。而对于类对象的初始化，要么需要通过拷贝构造、要么就需要使用 <code>()</code> 进行。这些不同方法都针对各自对象，不能通用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[<span class="number">3</span>] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;   <span class="comment">// 列表初始化</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo(<span class="keyword">int</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Foo <span class="title">foo</span><span class="params">(<span class="number">1</span>)</span></span>;             <span class="comment">// 普通构造初始化</span></span><br></pre></td></tr></table></figure>
+<p>为了解决这个问题，C++11 首先把初始化列表的概念绑定到了类型上，并将其称之为 <code>std::initializer_list</code>，允许构造函数或其他函数像参数一样使用初始化列表，这就为类对象的初始化与普通数组和 POD 的初始化方法提供了统一的桥梁，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;initializer_list&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Magic</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Magic(<span class="built_in">std</span>::<span class="built_in">initializer_list</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">list</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Magic magic = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br></pre></td></tr></table></figure>
+<p>这种构造函数被叫做初始化列表构造函数，具有这种构造函数的类型将在初始化时被特殊关照。</p>
+<p>初始化列表除了用在对象构造上，还能将其作为普通函数的形参，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">initializer_list</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">list</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func(&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>其次，C++11 提供了统一的语法来初始化任意的对象，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">float</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">B</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    B(<span class="keyword">int</span> _a, <span class="keyword">float</span> _b): a(_a), b(_b) &#123;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">float</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">A a &#123;<span class="number">1</span>, <span class="number">1.1</span>&#125;;    <span class="comment">// 统一的初始化语法</span></span><br><span class="line">B b &#123;<span class="number">2</span>, <span class="number">2.2</span>&#125;;</span><br></pre></td></tr></table></figure>
+
     </div>
 
     
@@ -272,12 +253,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/20/numpy函数（热更）/" rel="prev" title="numpy函数（热更）">
-      <i class="fa fa-chevron-left"></i> numpy函数（热更）
+    <a href="/2020/04/26/cpp1x-3/" rel="prev" title="cpp1x_3">
+      <i class="fa fa-chevron-left"></i> cpp1x_3
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/04/26/cpp1x-1/" rel="next" title="cpp1x_1">
-      cpp1x_1 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/04/26/cpp1x-5/" rel="next" title="cpp1x_5">
+      cpp1x_5 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -338,6 +319,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化列表："><span class="nav-number">1.</span> <span class="nav-text">初始化列表：</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

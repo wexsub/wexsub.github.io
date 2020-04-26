@@ -48,14 +48,18 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="类型推导：在传统 C 和 C++中，参数的类型都必须明确定义，这其实对我们快速进行编码没有任何帮助，尤其是当我们面对一大堆复杂的模板类型时，必须明确的指出变量的类型才能进行后续的编码，这不仅拖慢我们的开发效率，也让代码变得又臭又长。 C++ 11 引入了 auto 和 decltype 这两个关键字实现了类型推导，让编译器来操心变量的类型。这使得 C++ 也具有了和其他现代编程语言一样，某种意义上">
+<meta name="keywords" content="实验楼">
+<meta property="og:type" content="article">
 <meta property="og:title" content="cpp1x_2">
 <meta property="og:url" content="http://yoursite.com/2020/04/26/cpp1x-2/index.html">
 <meta property="og:site_name" content="Wexsub&#39;s blog">
+<meta property="og:description" content="类型推导：在传统 C 和 C++中，参数的类型都必须明确定义，这其实对我们快速进行编码没有任何帮助，尤其是当我们面对一大堆复杂的模板类型时，必须明确的指出变量的类型才能进行后续的编码，这不仅拖慢我们的开发效率，也让代码变得又臭又长。 C++ 11 引入了 auto 和 decltype 这两个关键字实现了类型推导，让编译器来操心变量的类型。这使得 C++ 也具有了和其他现代编程语言一样，某种意义上">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-26T02:38:17.781Z">
+<meta property="og:updated_time" content="2020-04-26T02:48:34.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cpp1x_2">
+<meta name="twitter:description" content="类型推导：在传统 C 和 C++中，参数的类型都必须明确定义，这其实对我们快速进行编码没有任何帮助，尤其是当我们面对一大堆复杂的模板类型时，必须明确的指出变量的类型才能进行后续的编码，这不仅拖慢我们的开发效率，也让代码变得又臭又长。 C++ 11 引入了 auto 和 decltype 这两个关键字实现了类型推导，让编译器来操心变量的类型。这使得 C++ 也具有了和其他现代编程语言一样，某种意义上">
 
 <link rel="canonical" href="http://yoursite.com/2020/04/26/cpp1x-2/">
 
@@ -195,8 +199,20 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-26 10:38:17" itemprop="dateCreated datePublished" datetime="2020-04-26T10:38:17+08:00">2020-04-26</time>
+              <time title="创建时间：2020-04-26 10:38:17 / 修改时间：10:48:34" itemprop="dateCreated datePublished" datetime="2020-04-26T10:38:17+08:00">2020-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c++</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -210,7 +226,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="类型推导："><a href="#类型推导：" class="headerlink" title="类型推导："></a>类型推导：</h1><p>在传统 C 和 C++中，参数的类型都必须明确定义，这其实对我们快速进行编码没有任何帮助，尤其是当我们面对一大堆复杂的模板类型时，必须明确的指出变量的类型才能进行后续的编码，这不仅拖慢我们的开发效率，也让代码变得又臭又长。</p>
+<p>C++ 11 引入了 <code>auto</code> 和 <code>decltype</code> 这两个关键字实现了类型推导，让编译器来操心变量的类型。这使得 C++ 也具有了和其他现代编程语言一样，某种意义上提供了无需操心变量类型的使用习惯。</p>
+<h4 id="（1）auto"><a href="#（1）auto" class="headerlink" title="（1）auto"></a>（1）auto</h4><p><code>auto</code> 在很早以前就已经进入了 C++，但是他始终作为一个存储类型的指示符存在，与 <code>register</code> 并存。在传统 C++ 中，如果一个变量没有声明为 <code>register</code> 变量，将自动被视为一个 <code>auto</code> 变量。而随着 <code>register</code> 被弃用，对 <code>auto</code> 的语义变更也就非常自然了。</p>
+<p>使用 <code>auto</code> 进行类型推导的一个最为常见而且显著的例子就是迭代器。在以前我们需要这样来书写一个迭代器：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::const_iterator itr = vec.cbegin(); itr != vec.cend(); ++itr)</span><br></pre></td></tr></table></figure>
+<p>而有了 <code>auto</code> 之后可以：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 由于 cbegin() 将返回 vector&lt;int&gt;::const_iterator </span></span><br><span class="line"><span class="comment">// 所以 itr 也应该是 vector&lt;int&gt;::const_iterator 类型</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> itr = vec.cbegin(); itr != vec.cend(); ++itr);</span><br></pre></td></tr></table></figure>
+<p>一些其他的常见用法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> i = <span class="number">5</span>;             <span class="comment">// i 被推导为 int</span></span><br><span class="line"><span class="keyword">auto</span> arr = <span class="keyword">new</span> <span class="keyword">auto</span>(<span class="number">10</span>) <span class="comment">// arr 被推导为 int *</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：<code>auto</code> 不能用于函数传参，因此下面的做法是无法通过编译的（考虑重载的问题，我们应该使用模板）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">auto</span> x, <span class="keyword">auto</span> y)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>此外，<code>auto</code> 还不能用于推导数组类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> <span class="keyword">auto</span> i = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">int</span> arr[<span class="number">10</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"> <span class="keyword">auto</span> auto_arr = arr;</span><br><span class="line"> <span class="keyword">auto</span> auto_arr2[<span class="number">10</span>] = arr;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="（2）decltype"><a href="#（2）decltype" class="headerlink" title="（2）decltype"></a>（2）decltype</h4><p><code>decltype</code> 关键字是为了解决 auto 关键字只能对变量进行类型推导的缺陷而出现的。</p>
+<p>它的用法和 <code>sizeof</code> 很相似：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(表达式)</span><br></pre></td></tr></table></figure>
+<p>在此过程中，编译器分析表达式并得到它的类型，却不实际计算表达式的值。</p>
+<p>有时候，我们可能需要计算某个表达式的类型，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> x = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">auto</span> y = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">decltype</span>(x+y) z;   <span class="comment">// z 是一个 int 型的</span></span><br></pre></td></tr></table></figure>
+<h4 id="（3）尾返回类型、auto-与-decltype-配合"><a href="#（3）尾返回类型、auto-与-decltype-配合" class="headerlink" title="（3）尾返回类型、auto 与 decltype 配合"></a>（3）尾返回类型、auto 与 decltype 配合</h4><p>你可能会思考，<code>auto</code> 能不能用于推导函数的返回类型。考虑这样一个例子加法函数的例子，在传统 C++ 中我们必须这么写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</span><br><span class="line"><span class="function">R <span class="title">add</span><span class="params">(T x, U y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>typename 和 class 在模板中没有区别，在 typename 这个关键字出现之前，都是使用 class 来定义模板参数的</p>
+</blockquote>
+<p>这样的代码其实变得很丑陋，因为程序员在使用这个模板函数的时候，必须明确指出返回类型。但事实上我们并不知道 <code>add()</code> 这个函数会做什么样的操作，获得一个什么样的返回类型。</p>
+<p>在 C++11 中这个问题得到解决。虽然你可能马上回反应出来使用 <code>decltype</code> 推导 <code>x+y</code> 的类型，写出这样的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(x+y) add(T x, U y);</span><br></pre></td></tr></table></figure>
+<p>但事实上这样的写法并不能通过编译。这是因为在编译器读到 <code>decltype(x+y)</code> 时，<code>x</code> 和 <code>y</code> 尚未被定义。为了解决这个问题，C++ 11 还引入了一个叫做尾返回类型（trailing return type），利用 auto 关键字将返回类型后置：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</span><br><span class="line">auto add(T x, U y) -&gt; decltype(x+y) &#123;</span><br><span class="line">    <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>令人欣慰的是从 C++ 14 开始是可以直接让普通函数具备返回值推导，因此下面的写法变得合法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">add</span><span class="params">(T x, U y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
     </div>
 
     
@@ -218,6 +265,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/实验楼/" rel="tag"># 实验楼</a>
+          </div>
 
         
 
@@ -228,7 +278,10 @@
     <a href="/2020/04/26/cpp1x-1/" rel="prev" title="cpp1x_1">
       <i class="fa fa-chevron-left"></i> cpp1x_1
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/26/cpp1x-3/" rel="next" title="cpp1x_3">
+      cpp1x_3 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -288,6 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类型推导："><span class="nav-number">1.</span> <span class="nav-text">类型推导：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#（1）auto"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">（1）auto</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（2）decltype"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">（2）decltype</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（3）尾返回类型、auto-与-decltype-配合"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">（3）尾返回类型、auto 与 decltype 配合</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -301,7 +355,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
