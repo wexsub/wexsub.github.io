@@ -172,6 +172,495 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/cpp1x-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/26/cpp1x-2/" class="post-title-link" itemprop="url">cpp1x_2</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-26 10:38:17" itemprop="dateCreated datePublished" datetime="2020-04-26T10:38:17+08:00">2020-04-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/cpp1x-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/26/cpp1x-1/" class="post-title-link" itemprop="url">cpp1x_1</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-26 10:24:38 / 修改时间：10:37:46" itemprop="dateCreated datePublished" datetime="2020-04-26T10:24:38+08:00">2020-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c++</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>语言可用性强化：</p>
+<p>1.nullptr 和  constexpr</p>
+<p>nullptr是为了区分0和NULL（空指针）</p>
+<h4 id="（1）nullptr"><a href="#（1）nullptr" class="headerlink" title="（1）nullptr"></a>（1）nullptr</h4><p><code>nullptr</code> 出现的目的是为了替代 <code>NULL</code>。在某种意义上来说，传统 C++ 会把 <code>NULL</code>、<code>0</code> 视为同一种东西，这取决于编译器如何定义 NULL，有些编译器会将 NULL 定义为 <code>((void*)0)</code>，有些则会直接将其定义为 <code>0</code>。</p>
+<p>C++ 不允许直接将 <code>void *</code> 隐式转换到其他类型，但如果 <code>NULL</code> 被定义为 <code>((void*)0)</code>，那么当编译 <code>char *ch = NULL;</code> 时，<code>NULL</code> 只好被定义为 <code>0</code>。而这依然会产生问题，将导致了 <code>C++</code> 中重载特性会发生混乱，考虑：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">char</span> *)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>对于这两个函数来说，如果 <code>NULL</code> 又被定义为了 <code>0</code> 那么 <code>foo(NULL);</code> 这个语句将会去调用 <code>foo(int)</code>，从而导致代码违反直观。</p>
+<p>为了解决这个问题，C++ 11 引入了 <code>nullptr</code> 关键字，专门用来区分空指针、0。<code>nullptr</code> 的类型为 <code>nullptr_t</code>，能够隐式的转换为任何指针或成员指针的类型，也能和他们进行相等或者不等的比较。</p>
+<p>你可以尝试使用 g++ 编译下面的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">char</span> *)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(<span class="literal">NULL</span> == (<span class="keyword">void</span> *)<span class="number">0</span>) <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"NULL == 0"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"NULL != 0"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    foo(<span class="number">0</span>);</span><br><span class="line">    <span class="comment">// foo(NULL); // 编译无法通过</span></span><br><span class="line">    foo(<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">char</span> *ch)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"call foo(char*)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"call foo(int)"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NULL == 0</span><br><span class="line">call foo(int)</span><br><span class="line">call foo(char*)</span><br></pre></td></tr></table></figure>
+<p>当我们加上注释中的 <code>foo(NULL)</code> 将编译无法通过：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">foo.cpp: In function ‘int main()’:</span><br><span class="line">foo.cpp:10:13: error: call of overloaded ‘foo(NULL)’ is ambiguous</span><br><span class="line">     foo(NULL); // 编译无法通过</span><br><span class="line">             ^</span><br><span class="line">foo.cpp:2:6: note: candidate: void foo(char*)</span><br><span class="line"> void foo(char *);</span><br><span class="line">      ^</span><br><span class="line">foo.cpp:3:6: note: candidate: void foo(int)</span><br><span class="line"> void foo(int);</span><br></pre></td></tr></table></figure>
+<p>所以，当需要使用 <code>NULL</code> 时候，请养成直接使用 <code>nullptr</code> 的习惯。</p>
+<h4 id="（2）constexpr"><a href="#（2）constexpr" class="headerlink" title="（2）constexpr"></a>（2）constexpr</h4><p>C++ 本身已经具备了常数表达式的概念，比如 <code>1+2</code>、<code>3*4</code> 这种表达式总是会产生相同的结果并且没有任何副作用。如果编译器能够在编译时就把这些表达式直接优化并植入到程序运行时，将能增加程序的性能。</p>
+<p>一个非常显著的例子就是在数组的定义阶段：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LEN 10</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">len_foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">5</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> arr_1[<span class="number">10</span>];</span><br><span class="line">    <span class="keyword">char</span> arr_2[LEN];</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">char</span> arr_3[len+<span class="number">5</span>];          <span class="comment">// 非法</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> len_2 = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">char</span> arr_4[len_2+<span class="number">5</span>];        <span class="comment">// 合法</span></span><br><span class="line">    <span class="keyword">char</span> arr_5[len_foo()+<span class="number">5</span>];  <span class="comment">// 非法   </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 C++11 之前，可以在常量表达式中使用的变量必须被声明为 <code>const</code>，在上面代码中，<code>len_2</code> 被定义成了常量，因此 <code>len_2+5</code> 是一个常量表达式，所以能够合法的分配一个数组；</p>
+<p>而对于 <code>arr_5</code> 来说，C++98 之前的编译器无法得知 <code>len_foo()</code> 在运行期实际上是返回一个常数，这也就导致了非法的产生。</p>
+<p>C++ 11 提供了 <code>constexpr</code> 让用户显式的声明函数或对象构造函数在编译器会成为常数，这个关键字明确的告诉编译器应该去验证 <code>len_foo</code> 在编译器就应该是一个常数。</p>
+<p>此外，<code>constexpr</code> 的函数可以使用递归：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="keyword">int</span> <span class="title">fibonacci</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n == <span class="number">1</span> || n == <span class="number">2</span> ? <span class="number">1</span> : fibonacci(n<span class="number">-1</span>)+fibonacci(n<span class="number">-2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从 C++ 14 开始，<code>constexptr</code> 函数可以在内部使用局部变量、循环和分支等简单语句，但 C++ 11 中是不可以的。例如下面的代码在 C++ 11 的标准下是不能够通过编译的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="keyword">int</span> <span class="title">fibonacci</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">2</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> fibonacci(n<span class="number">-1</span>)+fibonacci(n<span class="number">-2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/26/c-1x/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/26/c-1x/" class="post-title-link" itemprop="url">c++1x</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-26 09:11:14 / 修改时间：10:24:17" itemprop="dateCreated datePublished" datetime="2020-04-26T09:11:14+08:00">2020-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c++</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>c++1x新特性：</p>
+<p>1.auto</p>
+<p>2.lamda表达式</p>
+<p>3.右值引用</p>
+<p>4.std::thread</p>
+<p>5.std::regex</p>
+<p>6.编译：g++ main.cpp -std=c++14</p>
+<p>弃用特性：</p>
+<p>1.如果一个类有析构函数，为其生成拷贝构造函数和拷贝赋值运算符的特性被弃用了。</p>
+<p>2.不再允许字符串字面值常量赋值给一个 <code>char *</code>。如果需要用字符串字面值常量赋值和初始化一个 <code>char *</code>，应该使用 <code>const char *</code> 或者 <code>auto</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *str = <span class="string">"hello world!"</span>; <span class="comment">// 将出现弃用警告</span></span><br></pre></td></tr></table></figure>
+<p>3.C++98 异常说明、 <code>unexpected_handler</code>、<code>set_unexpected()</code> 等相关特性被弃用，应该使用 <code>noexcept</code>。</p>
+<p>4.<code>auto_ptr</code> 被弃用，应使用 <code>unique_ptr</code>。</p>
+<p>5.<code>register</code> 关键字被弃用。</p>
+<p>6.<code>bool</code> 类型的 <code>++</code> 操作被弃用。</p>
+<p>7.C 语言风格的类型转换被弃用，应该使用 <code>static_cast</code>、<code>reinterpret_cast</code>、<code>const_cast</code> 来进行类型转换。</p>
+<p>还有一些其他诸如参数绑定（C++11 提供了 <code>std::bind</code> 和 <code>std::function</code>）、<code>export</code> 等特性也均被弃用。</p>
+<p><strong>C++ 不是 C 的一个超集</strong>：</p>
+<p>在编写 C++ 时，应该尽可能的避免使用诸如 <code>void*</code> 之类的程序风格。而在不得不使用 C 时，应该注意使用 <code>extern &quot;C&quot;</code> 这种特性，将 C 语言的代码与 C++ 代码进行分离编译，再统一链接这种做法，例如：</p>
+<p>头文件 <code>foo.h</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo.h</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>源文件 <code>foo.c</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x+y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>源文件 <code>main.cpp</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"foo.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    add(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>应先使用 <code>gcc</code> 编译 C 语言的代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -c foo.c</span><br></pre></td></tr></table></figure>
+<p>编译出 foo.o 文件，再使用 <code>g++</code> 将 C++代码和 <code>.o</code> 文件链接起来（或者都编译为 <code>.o</code> 再统一链接）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ main.cpp foo.o -o main</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/numpy函数（热更）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/20/numpy函数（热更）/" class="post-title-link" itemprop="url">numpy函数（热更）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-20 11:02:11" itemprop="dateCreated datePublished" datetime="2020-03-20T11:02:11+08:00">2020-03-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-29 14:54:33" itemprop="dateModified" datetime="2020-03-29T14:54:33+08:00">2020-03-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="np-std"><a href="#np-std" class="headerlink" title="np.std()"></a>np.std()</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]])  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.std(a) <span class="comment"># 计算全局标准差  </span></span><br><span class="line"><span class="number">1.1180339887498949</span>  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.std(a, axis=<span class="number">0</span>) <span class="comment"># axis=0计算每一列的标准差  </span></span><br><span class="line">array([ <span class="number">1.</span>,  <span class="number">1.</span>])  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.std(a, axis=<span class="number">1</span>) <span class="comment"># 计算每一行的标准差  </span></span><br><span class="line">array([ <span class="number">0.5</span>,  <span class="number">0.5</span>])</span><br></pre></td></tr></table></figure>
+<p>注意还有第三个参数ddof，应该在数据量较小时指定为1.</p>
+<blockquote>
+<p>ddof : int, optional<br> Means Delta Degrees of Freedom. The divisor used in calculations is N -  ddof, where N represents the number of elements. By default ddof is  zero.</p>
+</blockquote>
+<h1 id="np-where"><a href="#np-where" class="headerlink" title="np.where()"></a>np.where()</h1><p><strong>numpy.where()</strong> 有两种用法：</p>
+<h3 id="1-np-where-condition-x-y"><a href="#1-np-where-condition-x-y" class="headerlink" title="1. np.where(condition, x, y)"></a>1. np.where(condition, x, y)</h3><p>满足条件(condition)，输出x，不满足输出y。</p>
+<p> 如果是一维数组，相当于<code>[xv if c else yv for (c,xv,yv) in zip(condition,x,y)]</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>aa = np.arange(<span class="number">10</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(aa,<span class="number">1</span>,<span class="number">-1</span>)</span><br><span class="line">array([<span class="number">-1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>])  <span class="comment"># 0为False，所以第一个输出-1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(aa &gt; <span class="number">5</span>,<span class="number">1</span>,<span class="number">-1</span>)</span><br><span class="line">array([<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>,  <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where([[<span class="literal">True</span>,<span class="literal">False</span>], [<span class="literal">True</span>,<span class="literal">True</span>]],    <span class="comment"># 官网上的例子</span></span><br><span class="line">			 [[<span class="number">1</span>,<span class="number">2</span>], [<span class="number">3</span>,<span class="number">4</span>]],</span><br><span class="line">             [[<span class="number">9</span>,<span class="number">8</span>], [<span class="number">7</span>,<span class="number">6</span>]])</span><br><span class="line">array([[<span class="number">1</span>, <span class="number">8</span>],</span><br><span class="line">	   [<span class="number">3</span>, <span class="number">4</span>]])</span><br></pre></td></tr></table></figure>
+<p>上面这个例子的条件为<code>[[True,False], [True,False]]</code>，分别对应最后输出结果的四个值。第一个值从<code>[1,9]</code>中选，因为条件为True，所以是选1。第二个值从<code>[2,8]</code>中选，因为条件为False，所以选8，后面以此类推。类似的问题可以再看个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where([[a &gt; <span class="number">5</span>,a &lt; <span class="number">5</span>], [a == <span class="number">10</span>,a == <span class="number">7</span>]],</span><br><span class="line">             [[<span class="string">"chosen"</span>,<span class="string">"not chosen"</span>], [<span class="string">"chosen"</span>,<span class="string">"not chosen"</span>]],</span><br><span class="line">             [[<span class="string">"not chosen"</span>,<span class="string">"chosen"</span>], [<span class="string">"not chosen"</span>,<span class="string">"chosen"</span>]])</span><br><span class="line"></span><br><span class="line">array([[<span class="string">'chosen'</span>, <span class="string">'chosen'</span>],</span><br><span class="line">       [<span class="string">'chosen'</span>, <span class="string">'chosen'</span>]], dtype=<span class="string">'&lt;U10'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="2-np-where-condition"><a href="#2-np-where-condition" class="headerlink" title="2. np.where(condition)"></a>2. np.where(condition)</h3><p>只有条件 (condition)，没有x和y，则输出满足条件 (即非0) 元素的坐标 (等价于<a href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.nonzero.html#numpy.nonzero" target="_blank" rel="noopener">numpy.nonzero</a>)。这里的坐标以tuple的形式给出，通常原数组有多少维，输出的tuple中就包含几个数组，分别对应符合条件元素的各维坐标。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a &gt; <span class="number">5</span>)				<span class="comment"># 返回索引</span></span><br><span class="line">(array([<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]),)   </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[np.where(a &gt; <span class="number">5</span>)]  			<span class="comment"># 等价于 a[a&gt;5]</span></span><br><span class="line">array([ <span class="number">6</span>,  <span class="number">8</span>, <span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where([[<span class="number">0</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">0</span>]])</span><br><span class="line">(array([<span class="number">0</span>, <span class="number">1</span>]), array([<span class="number">1</span>, <span class="number">0</span>]))</span><br></pre></td></tr></table></figure>
+<p>上面这个例子条件中<code>[[0,1],[1,0]]</code>的真值为两个1，各自的第一维坐标为<code>[0,1]</code>，第二维坐标为<code>[1,0]</code> 。</p>
+<p> 下面看个复杂点的例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">27</span>).reshape(<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">        [ <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>],</span><br><span class="line">        [ <span class="number">6</span>,  <span class="number">7</span>,  <span class="number">8</span>]],</span><br><span class="line"></span><br><span class="line">       [[ <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>],</span><br><span class="line">        [<span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>],</span><br><span class="line">        [<span class="number">15</span>, <span class="number">16</span>, <span class="number">17</span>]],</span><br><span class="line"></span><br><span class="line">       [[<span class="number">18</span>, <span class="number">19</span>, <span class="number">20</span>],</span><br><span class="line">        [<span class="number">21</span>, <span class="number">22</span>, <span class="number">23</span>],</span><br><span class="line">        [<span class="number">24</span>, <span class="number">25</span>, <span class="number">26</span>]]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a &gt; <span class="number">5</span>)</span><br><span class="line">(array([<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>]),</span><br><span class="line"> array([<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>]),</span><br><span class="line"> array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 符合条件的元素为</span></span><br><span class="line">	   [ <span class="number">6</span>,  <span class="number">7</span>,  <span class="number">8</span>]],</span><br><span class="line"></span><br><span class="line">      [[ <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>],</span><br><span class="line">       [<span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>],</span><br><span class="line">       [<span class="number">15</span>, <span class="number">16</span>, <span class="number">17</span>]],</span><br><span class="line"></span><br><span class="line">      [[<span class="number">18</span>, <span class="number">19</span>, <span class="number">20</span>],</span><br><span class="line">       [<span class="number">21</span>, <span class="number">22</span>, <span class="number">23</span>],</span><br><span class="line">       [<span class="number">24</span>, <span class="number">25</span>, <span class="number">26</span>]]]</span><br></pre></td></tr></table></figure>
+<p>所以np.where会输出每个元素的对应的坐标，因为原数组有三维，所以tuple中有三个数组。</p>
+<h1 id="np-mean"><a href="#np-mean" class="headerlink" title="np.mean()"></a>np.mean()</h1><p>mean()函数功能：求取均值</p>
+<p>经常操作的参数为axis，以m * n矩阵举例：</p>
+<p>axis 不设置值，对 m*n 个数求均值，返回一个实数</p>
+<p>axis = 0：压缩行，对各列求均值，返回 1* n 矩阵</p>
+<p>axis =1 ：压缩列，对各行求均值，返回 m *1 矩阵</p>
+<h1 id="np-shape"><a href="#np-shape" class="headerlink" title="np.shape()"></a>np.shape()</h1><p>返回一个元组（x,y）表示是x*y的矩阵。</p>
+<h1 id="np-random-permutation（）"><a href="#np-random-permutation（）" class="headerlink" title="np.random.permutation（）"></a>np.random.permutation（）</h1><p>随机排序</p>
+<h1 id="np-delete"><a href="#np-delete" class="headerlink" title="np.delete()"></a>np.delete()</h1><p>1.numpy.delete(arr,obj,axis=None)<br>arr:输入向量<br>obj:表明哪一个子向量应该被移除。可以为整数或一个int型的向量<br>axis:表明删除哪个轴的子向量，若默认，则返回一个被拉平的向量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">a = np.array(np.arange(12).reshape(3,4))</span><br><span class="line">a</span><br><span class="line">Out[301]: </span><br><span class="line">array([[ 0,  1,  2,  3],</span><br><span class="line">       [ 4,  5,  6,  7],</span><br><span class="line">       [ 8,  9, 10, 11]])</span><br><span class="line">np.delete(a,1,0)</span><br><span class="line">Out[302]: </span><br><span class="line">array([[ 0,  1,  2,  3],</span><br><span class="line">       [ 8,  9, 10, 11]])</span><br><span class="line">np.delete(a,1,1)</span><br><span class="line">Out[303]: </span><br><span class="line">array([[ 0,  2,  3],</span><br><span class="line">       [ 4,  6,  7],</span><br><span class="line">       [ 8, 10, 11]])</span><br><span class="line">np.delete(a,[0,1],1)</span><br><span class="line">Out[304]: </span><br><span class="line">array([[ 2,  3],</span><br><span class="line">       [ 6,  7],</span><br><span class="line">       [10, 11]])</span><br><span class="line">np.delete(a,np.s_[::2],1)</span><br><span class="line">Out[306]: </span><br><span class="line">array([[ 1,  3],</span><br><span class="line">       [ 5,  7],</span><br><span class="line">       [ 9, 11]])</span><br><span class="line">注释：np.delete不能删除元素，只能删除向量，</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/listening-and-note-taking-skills/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/04/listening-and-note-taking-skills/" class="post-title-link" itemprop="url">listening and note-taking skills</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-04 08:40:49" itemprop="dateCreated datePublished" datetime="2020-03-04T08:40:49+08:00">2020-03-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/voc1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wexsub">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wexsub's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/03/voc1/" class="post-title-link" itemprop="url">voc1</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-03 15:07:22 / 修改时间：22:14:52" itemprop="dateCreated datePublished" datetime="2020-03-03T15:07:22+08:00">2020-03-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/English/" itemprop="url" rel="index">
+                    <span itemprop="name">English</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>2020.03.03</p>
+<p>1.intubation</p>
+<p>2.mishandle v.</p>
+<p>3.coronvirus</p>
+<p>4.govt abbr.</p>
+<p>5.implement (v./n.)implementation</p>
+<p>6.accommodate</p>
+<p>7.protocol</p>
+<p>8.hypotheses</p>
+<p>9.on the fly</p>
+<p>10.molecular</p>
+<p>11.compound</p>
+<p>12.seek-sought</p>
+<p>13.iterative</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/20/造数据与程序对拍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -414,7 +903,7 @@ bernoulli_distribution：指定概率的随机布尔值。
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/official-1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/15/official-53/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -428,7 +917,7 @@ bernoulli_distribution：指定概率的随机布尔值。
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2020/02/15/official-1/" class="post-title-link" itemprop="url">official_1</a>
+            <a href="/2020/02/15/official-53/" class="post-title-link" itemprop="url">Self-Driving Cars Probably Won't Boost Commuter Productivity</a>
         </h1>
 
         <div class="post-meta">
@@ -439,6 +928,24 @@ bernoulli_distribution：指定概率的随机布尔值。
               <span class="post-meta-item-text">发表于</span>
 
               <time title="创建时间：2020-02-15 16:16:35" itemprop="dateCreated datePublished" datetime="2020-02-15T16:16:35+08:00">2020-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-26 22:54:53" itemprop="dateModified" datetime="2020-02-26T22:54:53+08:00">2020-02-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/English/" itemprop="url" rel="index">
+                    <span itemprop="name">English</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -452,7 +959,20 @@ bernoulli_distribution：指定概率的随机布尔值。
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="Self-Driving-Cars-Probably-Won’t-Boost-Commuter-Productivity"><a href="#Self-Driving-Cars-Probably-Won’t-Boost-Commuter-Productivity" class="headerlink" title="Self-Driving Cars Probably Won’t Boost Commuter Productivity"></a>Self-Driving Cars Probably Won’t Boost Commuter Productivity</h1><h2 id="Vocabulary"><a href="#Vocabulary" class="headerlink" title="Vocabulary:"></a>Vocabulary:</h2><p>1.sicientific</p>
+<p>2.advocate</p>
+<p>3.tout</p>
+<p>4.congestion</p>
+<p>5.allege(alleged)</p>
+<p>6.productivity</p>
+<p>7.newfound</p>
+<p>8.whittle  (whittle down)</p>
+<h2 id="expressions"><a href="#expressions" class="headerlink" title="expressions:"></a>expressions:</h2><p>1.another alleged value of … is …</p>
+<p>另一个说法是</p>
+<p>e.g. <strong>Another alleged value of being a passenger rather than a driver is more productivity-you could work rather than concentrate on driving.</strong></p>
+<h2 id="sentences"><a href="#sentences" class="headerlink" title="sentences:"></a>sentences:</h2><p>1.Got a minute?  有一分钟时间吗？</p>
+<p>2.But most people might not spend their newfound free time in self-driving cars whittling down their to-do lists. </p>
+
       
     </div>
 
@@ -607,575 +1127,6 @@ bernoulli_distribution：指定概率的随机布尔值。
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/13/wget/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wexsub">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wexsub's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/13/wget/" class="post-title-link" itemprop="url">wget</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-13 19:31:28 / 修改时间：20:49:34" itemprop="dateCreated datePublished" datetime="2020-02-13T19:31:28+08:00">2020-02-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h1><h2 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h2><p>wget命令**用来从指定的URL下载文件。wget非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。</p>
-<h2 id="语法："><a href="#语法：" class="headerlink" title="语法："></a>语法：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget(选项)(参数)</span><br></pre></td></tr></table></figure>
-<h2 id="选项："><a href="#选项：" class="headerlink" title="选项："></a>选项：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-a&lt;日志文件&gt;：在指定的日志文件中记录资料的执行过程；</span><br><span class="line">-A&lt;后缀名&gt;：指定要下载文件的后缀名，多个后缀名之间使用逗号进行分隔；</span><br><span class="line">-b：进行后台的方式运行wget；</span><br><span class="line">-B&lt;连接地址&gt;：设置参考的连接地址的基地地址；</span><br><span class="line">-c：继续执行上次终端的任务；</span><br><span class="line">-C&lt;标志&gt;：设置服务器数据块功能标志on为激活，off为关闭，默认值为on；</span><br><span class="line">-d：调试模式运行指令；</span><br><span class="line">-D&lt;域名列表&gt;：设置顺着的域名列表，域名之间用“，”分隔；</span><br><span class="line">-e&lt;指令&gt;：作为文件“.wgetrc”中的一部分执行指定的指令；</span><br><span class="line">-h：显示指令帮助信息；</span><br><span class="line">-i&lt;文件&gt;：从指定文件获取要下载的URL地址；</span><br><span class="line">-l&lt;目录列表&gt;：设置顺着的目录列表，多个目录用“，”分隔；</span><br><span class="line">-L：仅顺着关联的连接；</span><br><span class="line">-r：递归下载方式；</span><br><span class="line">-nc：文件存在时，下载文件不覆盖原有文件；</span><br><span class="line">-nv：下载时只显示更新和出错信息，不显示指令的详细执行过程；</span><br><span class="line">-o: 指定文件名；</span><br><span class="line">-q：不显示指令执行过程；</span><br><span class="line">-nh：不查询主机名称；</span><br><span class="line">-v：显示详细执行过程；</span><br><span class="line">-V：显示版本信息；</span><br><span class="line">--passive-ftp：使用被动模式PASV连接FTP服务器；</span><br><span class="line">--follow-ftp：从HTML文件中下载FTP连接文件。</span><br><span class="line">--limit-rate=：限速；</span><br></pre></td></tr></table></figure>
-<h2 id="参数："><a href="#参数：" class="headerlink" title="参数："></a>参数：</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL： 下载指定的URL地址</span><br></pre></td></tr></table></figure>
-<h2 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h2><h3 id="o（下载并以不同的文件名保存）："><a href="#o（下载并以不同的文件名保存）：" class="headerlink" title="-o（下载并以不同的文件名保存）："></a>-o（下载并以不同的文件名保存）：</h3><p>一般来说，wget会以最后一个符合<code>/</code>的后面的字符来命令，对于<strong>动态链接</strong>的下载通常文件名会不正确。</p>
-<p>比如说下面的例子会下载一个文件并以名称<code>download.aspx?id=1080</code>保存:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://www.***.com/download?id=1</span><br></pre></td></tr></table></figure>
-<p>为了解决这个问题，我们可以使用参数<code>-O</code>来指定一个文件名：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O ***.zip http://www.***.com/download?id=1</span><br></pre></td></tr></table></figure>
-<h3 id="—limit-rate-（限速）："><a href="#—limit-rate-（限速）：" class="headerlink" title="—limit-rate=（限速）："></a>—limit-rate=（限速）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --limit-rate=300k http://www.***.com/testfile.zip</span><br></pre></td></tr></table></figure>
-<p>当你执行wget的时候，它默认会占用全部可能的宽带下载。但是当你准备下载一个大文件，而你还需要下载其它文件时就有必要限速了。</p>
-<h3 id="c（断点续传）："><a href="#c（断点续传）：" class="headerlink" title="-c（断点续传）："></a>-c（断点续传）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -c http://www.linuxde.net/testfile.zip</span><br></pre></td></tr></table></figure>
-<p>使用<code>wget -c</code>重新启动下载中断的文件，对于我们下载大文件时突然由于网络等原因中断非常有帮助，我们可以继续接着下载而不是重新下载一个文件。需要继续中断的下载时可以使用<code>-c</code>参数。</p>
-<h3 id="i（下载多个文件）："><a href="#i（下载多个文件）：" class="headerlink" title="-i（下载多个文件）："></a>-i（下载多个文件）：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -i filelist.txt</span><br></pre></td></tr></table></figure>
-<p>首先，保存一份下载链接文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; filelist.txt</span><br><span class="line">url1</span><br><span class="line">url2</span><br><span class="line">url3</span><br><span class="line">url4</span><br></pre></td></tr></table></figure>
-<p>接着使用这个文件和参数<code>-i</code>下载。</p>
-<h3 id="镜像网站："><a href="#镜像网站：" class="headerlink" title="镜像网站："></a>镜像网站：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --mirror -p --convert-links -P ./LOCAL URL</span><br></pre></td></tr></table></figure>
-<p> 下载整个网站到本地。</p>
-<ul>
-<li><code>--miror</code>开户镜像下载。</li>
-<li><code>-p</code>下载所有为了html页面显示正常的文件。</li>
-<li><code>--convert-links</code>下载后，转换成本地的链接。</li>
-<li><code>-P ./LOCAL</code>保存所有文件和目录到本地指定目录。</li>
-</ul>
-<h3 id="过滤指定格式下载："><a href="#过滤指定格式下载：" class="headerlink" title="过滤指定格式下载："></a>过滤指定格式下载：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --reject=gif ur</span><br></pre></td></tr></table></figure>
-<p> 下载一个网站，但你不希望下载图片，可以使用这条命令。</p>
-<h2 id="参考（抄）网址："><a href="#参考（抄）网址：" class="headerlink" title="参考（抄）网址："></a>参考（抄）网址：</h2>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/30/两种计算模型/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wexsub">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wexsub's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/30/两种计算模型/" class="post-title-link" itemprop="url">两种计算模型</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-01-30 02:53:08 / 修改时间：03:38:19" itemprop="dateCreated datePublished" datetime="2020-01-30T02:53:08+08:00">2020-01-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据结构/" itemprop="url" rel="index">
-                    <span itemprop="name">数据结构</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="综述："><a href="#综述：" class="headerlink" title="综述："></a>综述：</h1><p>​    两种计算模型（图灵机和ram）的作用都是比较与评判算法的效率。</p>
-<p>​    话说好像没啥好写的，就放了些图片。图片来自清华大学数据结构慕课（Junhui Deng）的讲义。</p>
-<h1 id="1-图灵机"><a href="#1-图灵机" class="headerlink" title="1.图灵机"></a>1.图灵机</h1><p><img src="https://s2.ax1x.com/2020/01/30/1lMbW9.png" alt="图灵机1"></p>
-<p><img src="https://s2.ax1x.com/2020/01/30/1lMOQ1.png" alt="图灵机2"></p>
-<p><img src="https://s2.ax1x.com/2020/01/30/1lMjL6.png" alt="图灵机3"></p>
-<p>其中<code>(&lt;, 1; 0, L, &lt;)</code>之类的式子，与其说是一个步骤，不如说是一个法则，一种if法则。</p>
-<h1 id="2-ram-random-access-machine"><a href="#2-ram-random-access-machine" class="headerlink" title="2.ram(random access machine)"></a>2.ram(random access machine)</h1><p><strong>注意，ram只有加减的操作。</strong></p>
-<p><img src="https://s2.ax1x.com/2020/01/30/1lMXsx.png" alt="ram1"></p>
-<p><img src="https://s2.ax1x.com/2020/01/30/1lM7i4.png" alt="ram2"></p>
-<p><img src="https://s2.ax1x.com/2020/01/30/1l3FSJ.png" alt="ram3"></p>
-<p><img src="https://s2.ax1x.com/2020/01/30/1lMqzR.png" alt></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/26/离散数学学习笔记1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wexsub">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wexsub's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/26/离散数学学习笔记1/" class="post-title-link" itemprop="url">离散数学学习笔记1</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-01-26 01:41:20 / 修改时间：04:47:26" itemprop="dateCreated datePublished" datetime="2020-01-26T01:41:20+08:00">2020-01-26</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1-条件语句"><a href="#1-条件语句" class="headerlink" title="1.条件语句"></a>1.条件语句</h1><h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><script type="math/tex; mode=display">
-令p和q为命题。条件语句\ p\rightarrow q\ 是命题“如果p，则q”。\\ 当p为真而q为假时，条件语句\ p\rightarrow q\ 为假，否则为真。</script><p>​    容易混淆的语句：</p>
-<script type="math/tex; mode=display">
-“p仅当q”和“q除非\neg p”\\ 请记住“p仅当q”表达了与“如果p, 则q”同样的意思， 注意“p仅当q”说的是当q不为真时p不能为真。\\ 也就是说，如果p为真但q为假，则这个语句为假。\\ 当p为假时，q可以为真也可以为假，因为语句并没有谈及q的真值。\\ 要小心不要用“q仅当p”来表达p\rightarrow q, 因为这是错误的。\\ 要明白这一点，请注意当p和q取不同的真值时，“q仅当p”和p\rightarrow q的真值是不
-同的。\\ 请记住“q除非\neg p“表达了和p\rightarrow q条件语句一样的意思，\\ 注意“q除非\neg p”的意思是如果\neg p是假的，则q必是真的。\\ 也就是说，当p为真，而q为假时，语句“q除非\neg p”是假的，否则是真的。\\ 因此， “q除非\neg p”与p\rightarrow q总是具有相同的真值。</script><h1 id="2-重要的逻辑等价式"><a href="#2-重要的逻辑等价式" class="headerlink" title="2.重要的逻辑等价式"></a>2.重要的逻辑等价式</h1><script type="math/tex; mode=display">
-结合律：\\ 
-(p\vee q)\vee r\equiv p\vee(q\vee r)\\
-(p\wedge q)\wedge r\equiv p\wedge(q\wedge r)\\
-分配律(良定义)：\\
-p\vee(q\wedge r)\equiv (p\vee q)\wedge(p\vee r)\\
-p\wedge(q\vee r)\equiv (p\wedge q)\vee(p\wedge r)\\
-徳·摩根律：\\
-\neg(p\wedge q)\equiv \neg p \vee \neg q\\
-\neg(p\vee q)\equiv \neg p \wedge \neg q\\
-\neg (\bigvee_{j=1}^{n}p_{j})\equiv\bigwedge_{j=1}^{n}\neg p_{j}\\
-\neg (\bigwedge_{j=1}^{n}p_{j})\equiv\bigvee_{j=1}^{n}\neg p_{j}\\
-吸收律：\\
-p\wedge (p \vee q)\equiv p\\
-p\vee (p \wedge q)\equiv p</script><h2 id="条件命题的逻辑等价式："><a href="#条件命题的逻辑等价式：" class="headerlink" title="条件命题的逻辑等价式："></a>条件命题的逻辑等价式：</h2><script type="math/tex; mode=display">
-p\rightarrow q\equiv\neg p\vee q\\
-p\rightarrow q\equiv\neg q\rightarrow\neg p\\
-p\vee q\equiv \neg p\rightarrow q\\
-p\wedge q\equiv \neg(p\rightarrow \neg q)\\
-\neg(p\rightarrow q)\equiv p\wedge\neg q\\
-(p\rightarrow q)\wedge(p\rightarrow r)\equiv p\rightarrow(q\wedge r)\\
-(p\rightarrow r)\wedge(q\rightarrow r)\equiv (p\vee q)\rightarrow r\\
-(p\rightarrow q)\vee(p\rightarrow r)\equiv p\rightarrow(q\vee r)\\
-(p\rightarrow r)\vee(q\rightarrow r)\equiv (p\wedge q)\rightarrow r</script><h2 id="双条件命题的逻辑等价式："><a href="#双条件命题的逻辑等价式：" class="headerlink" title="双条件命题的逻辑等价式："></a>双条件命题的逻辑等价式：</h2><script type="math/tex; mode=display">
-p\leftrightarrow q\equiv(p\to q)\wedge(q\to p)\\
-p\leftrightarrow q\equiv\neg p\leftrightarrow\neg q\\
-p\leftrightarrow q\equiv(p\wedge q)\vee(\neg p\wedge \neg q)\\
-\neg(p\leftrightarrow q)\equiv p\leftrightarrow\neg q</script><p>​    命题逻辑学深了的话，会很难，但也很有用。后面的数独解法在过完算法一章后，看能不能写个报告，早知道大作业做这个了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/18/pwntools笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wexsub">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wexsub's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/18/pwntools笔记/" class="post-title-link" itemprop="url">pwntools笔记</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-01-18 12:31:49 / 修改时间：12:37:32" itemprop="dateCreated datePublished" datetime="2020-01-18T12:31:49+08:00">2020-01-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网安/" itemprop="url" rel="index">
-                    <span itemprop="name">网安</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/18/bugku-new-刷题笔记1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wexsub">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wexsub's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/18/bugku-new-刷题笔记1/" class="post-title-link" itemprop="url">bugku(new)刷题笔记1</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-18 11:44:16" itemprop="dateCreated datePublished" datetime="2020-01-18T11:44:16+08:00">2020-01-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-20 13:50:19" itemprop="dateModified" datetime="2020-01-20T13:50:19+08:00">2020-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网安/" itemprop="url" rel="index">
-                    <span itemprop="name">网安</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h5 id="题目网址："><a href="#题目网址：" class="headerlink" title="题目网址："></a>题目网址：</h5><p><a href="https://new.bugku.com/challenges" target="_blank" rel="noopener">newbugku</a></p>
-<h5 id="用户id"><a href="#用户id" class="headerlink" title="用户id:"></a>用户id:</h5><p>centuryplant</p>
-<h1 id="misc-0和1的故事"><a href="#misc-0和1的故事" class="headerlink" title="(misc) 0和1的故事"></a>(misc) 0和1的故事</h1><p>下载下来的文件是一个压缩包，解压到最后是一个文本文件：<code>flag{}.txt</code>,打开文件发现只有一行，显示的是<code>Flag_is_not_here</code>。</p>
-<p>用notepad打开，发现有很多空行。</p>
-<p>根据提示，将空格替换成0，替换后发现还有空格，应该是Tab。把剩下的<code>\t</code>用1替换。得到一串二进制，再转换成16进制，就是flag。</p>
-<h1 id="pwn-最简单的pwn"><a href="#pwn-最简单的pwn" class="headerlink" title="(pwn)最简单的pwn"></a>(pwn)最简单的pwn</h1><p>直接<code>nc</code> 连接，然后<code>cat</code>得到flag？</p>
-<p>我连接的时候显示<code>connection refused</code>，没法，直接抄了flag上去。</p>
-<h1 id="web-web1"><a href="#web-web1" class="headerlink" title="(web)web1"></a>(web)web1</h1><p>两个函数。</p>
-<p>第一个函数是<code>file_get_contents()</code>，作用应该是从一个<code>url</code>返回网站的数据，但<code>$b</code>只是一串没有意义的字符，所以应该返回空或者报错。</p>
-<p>第二个函数是<code>trim()</code>，作用是去除字符首尾的空白字符。</p>
-<p>本地试了一下，在本地php版本下file_get_contents()已经返回空（不是<code>NULL</code>）了，所以加参数，使网页url构造为<code>http://123.206.31.85:10001/?a=</code>即得flag。</p>
-<h1 id="web-web26"><a href="#web-web26" class="headerlink" title="(web)web26"></a>(web)web26</h1><p>这道题有点怪。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">$num=$_GET[&apos;num&apos;]; </span><br><span class="line">$str=$_GET[&apos;str&apos;]; </span><br><span class="line">show_source(__FILE__); </span><br><span class="line">if (isset($num)&amp;&amp;isset($str)) &#123; </span><br><span class="line">    if (preg_match(&apos;/\d+/sD&apos;,$str)) &#123; </span><br><span class="line">        echo &quot;vagetable hhhh&quot;; </span><br><span class="line">        exit(); </span><br><span class="line">    &#125; </span><br><span class="line">    $result=is_numeric($num) and is_numeric($str); </span><br><span class="line">    if ($result) &#123; </span><br><span class="line">        include &quot;flag.php&quot;; </span><br><span class="line">        echo &quot;$flag&quot;; </span><br><span class="line">    &#125; </span><br><span class="line">    else&#123; </span><br><span class="line">        echo &quot;vagetablessssss&quot;; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
-<p>重点在于<code>is_numeric()</code>函数的否定返回是空，而不是0.</p>
-<p>我理解的题意是，<code>str</code>是一个是数字（字符），但不能出现数字。</p>
-<p>但实际上因为上面那个原因，<code>and</code> 好像没有作用一样。只要让<code>str</code>是一个字符就行了。-_-</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/c++函数重载的一些讨论/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="wexsub">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wexsub's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/01/14/c++函数重载的一些讨论/" class="post-title-link" itemprop="url">关于运算符重载的一些简单细节讨论</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-14 06:52:46" itemprop="dateCreated datePublished" datetime="2020-01-14T06:52:46+08:00">2020-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-18 11:42:41" itemprop="dateModified" datetime="2020-01-18T11:42:41+08:00">2020-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c-语法/" itemprop="url" rel="index">
-                    <span itemprop="name">c++语法</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="关于运算符重载的一些简单细节讨论"><a href="#关于运算符重载的一些简单细节讨论" class="headerlink" title="关于运算符重载的一些简单细节讨论"></a>关于运算符重载的一些简单细节讨论</h1><h2 id="1-运算符重载的本质仍是函数重载"><a href="#1-运算符重载的本质仍是函数重载" class="headerlink" title="1. 运算符重载的本质仍是函数重载"></a>1. 运算符重载的本质仍是函数重载</h2><p>​    在学习的过程中，曾多次强调运算符重载的本质是函数重载，更具体地说，<strong>重载的运算符是可以用中序语法调用的成员函数或友元函数</strong>。使用中序语法，代码会更直观。但在某些情况下，使用成员函数原来的形式（<code>operator[运算符]</code>）或许更加容易理解。</p>
-<p>​    作为对比，先是一些运算符重载的例子。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 《c++覆辙录》：常见错误23</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">T</span>&#123;</span></span><br><span class="line">    <span class="keyword">friend</span> T <span class="keyword">operator</span>+(<span class="keyword">const</span> T&amp;,<span class="keyword">const</span> T&amp;); </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    T &amp;<span class="keyword">operator</span>=(<span class="keyword">const</span> T&amp;);</span><br><span class="line">    T <span class="keyword">operator</span>-();</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">T a,b;</span><br><span class="line">a=b;</span><br><span class="line">a.<span class="keyword">operator</span>=(b);</span><br></pre></td></tr></table></figure>
-<p>​    其中<code>a=b</code>和<code>a.operator=(b)</code>等价，而编译器在编译过程中也会将前者替换为后者，但我们直接用后者也是可以的。一般情况下，我们会选择第一种写法，也就是中序写法。</p>
-<p>​    在另外的一些情况下，可能选择后者是一种更好的选择。一个例子是派生类的复制赋值运算符调用基类的复制赋值运算符。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//《c++覆辙录》：常见错误23 （改）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    A &amp;<span class="keyword">operator</span>=(<span class="keyword">const</span> A&amp;)&#123;<span class="keyword">return</span> *<span class="keyword">this</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>:</span> <span class="keyword">public</span> A&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    B &amp;<span class="keyword">operator</span>=(<span class="keyword">const</span> B&amp;);</span><br><span class="line">    B(<span class="keyword">int</span> k=<span class="number">0</span>):c(k)&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">display</span><span class="params">()</span></span>&#123;<span class="built_in">cout</span> &lt;&lt; c &lt;&lt; <span class="built_in">endl</span>;&#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> c;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">B &amp; B::<span class="keyword">operator</span>=(<span class="keyword">const</span> B&amp;b)&#123;</span><br><span class="line">    <span class="keyword">if</span>(&amp;b != <span class="keyword">this</span>)&#123;</span><br><span class="line">        A::<span class="keyword">operator</span>=(b);</span><br><span class="line">        (*<span class="keyword">static_cast</span>&lt;A*&gt;(<span class="keyword">this</span>)) = b;</span><br><span class="line">        c = b.c;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​    可以明显地看到，此处调用基类A的复制赋值运算符采用成员函数的形式更为清晰，也更好写。如果要采用中序写法，要先进行类型转换，再复制赋值，即<code>(*static_cast&lt;A*&gt;(this))=b</code>的形式，会让读代码的人不易理解。    </p>
-<p>​    但令人迷惑的是中序记法与成员函数有<strong>一点本质的不同</strong>，这点也需要记一下。使用中序记法编译时会搜索包括成员函数和非成员函数的对应运算符重载，但使用成员函数记法编译时只会搜索成员函数。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//《c++覆辙录》：常见错误23 （改）</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    X &amp;<span class="keyword">operator</span>%(<span class="keyword">const</span> X&amp;);</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    X(<span class="keyword">int</span> xx):x(xx)&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">display</span><span class="params">()</span></span>&#123;<span class="built_in">cout</span>&lt;&lt;x&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">X &amp;X::<span class="keyword">operator</span>%(<span class="keyword">const</span> X&amp;xx)&#123;</span><br><span class="line">    x = x%xx.x;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">X &amp;<span class="keyword">operator</span>%(X&amp;xx,<span class="keyword">int</span> x)&#123;</span><br><span class="line">    xx.x %= x;</span><br><span class="line">    <span class="keyword">return</span> xx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> X::f()&#123;</span><br><span class="line">    X &amp;anX = *<span class="keyword">this</span>;</span><br><span class="line">    anX % <span class="number">11</span>;</span><br><span class="line">    <span class="keyword">operator</span>%(anX,<span class="number">11</span>); <span class="comment">//报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​    上面的代码中分别有一个成员函数和一个非成员函数对<code>%</code>进行了重载。我们如果想在<code>x::f()</code>中调用非成员函数版本的重载，初步看上去，<code>anX % 11</code>和<code>operator%(ans,11)</code>应该是等价的。但实际上，在<code>anX % 11</code>这步中，编译器搜索了成员函数和非成员函数，所以能匹配到正确的函数（非成员函数）；而<code>operator%(ans,11)</code>这行代码，编译器只会搜索成员函数，所以会因为找不到匹配的函数而报错。</p>
-<h2 id="2-复合赋值与算术运算符的重载方式或顺序"><a href="#2-复合赋值与算术运算符的重载方式或顺序" class="headerlink" title="2.复合赋值与算术运算符的重载方式或顺序"></a>2.复合赋值与算术运算符的重载方式或顺序</h2><p>对于类似（<code>+=</code>）的复合赋值运算符和类似（<code>+</code>）的算术运算符，我们可以有三种重载方式或顺序。</p>
-<ol>
-<li>重载符合赋值运算符后，用重载的复合赋值运算符重载算术运算符。</li>
-<li>重载算术运算符后，用重载的算术运算符重载复合赋值运算符。</li>
-<li>独立重载两个运算符。</li>
-</ol>
-<p>先来看前两个方式，我认为这两种方式的显著优点是实现了<strong>代码重用</strong>。在重载完一个函数后，确实都能让第二个重载的运算符更易读。</p>
-<p>《primer c++》 提到，如果类同时定义了算术运算符和相关的复合赋值运算符，则通常情况下应该使用复合赋值来实现算术运算符。下面将在简单情况下讨论一般情况下这句话的合理性。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">T</span>&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    T(<span class="keyword">int</span> va=<span class="number">0</span>):val(va)&#123;<span class="built_in">cout</span> &lt;&lt; <span class="string">"constructing "</span> &lt;&lt;val&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br><span class="line">    T(<span class="keyword">const</span> T &amp;b)&#123;val=b.val;<span class="built_in">cout</span> &lt;&lt; <span class="string">"copying "</span>&lt;&lt;val&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br><span class="line">    T <span class="keyword">operator</span>+(<span class="keyword">const</span> T&amp;)<span class="keyword">const</span>;</span><br><span class="line">    T &amp;<span class="keyword">operator</span>+=(<span class="keyword">const</span> T&amp;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    T a = <span class="number">1</span>;</span><br><span class="line">    T b = <span class="number">2</span>;</span><br><span class="line">    T c = a+b;</span><br><span class="line">    a+=b;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> 对于上面的类和主函数，考察在执行一套<code>+</code>和<code>+=</code>运算后，各种方式一共调用的构造或拷贝构造函数次数。由于<code>Code::Blocks</code>的编译器开启了返回值优化，且两种情况函数<code>return</code>时情况相同，所以下面的结果中，函数<code>return</code>一个临时对象时不会调用拷贝构造函数。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一种方式</span></span><br><span class="line">T &amp;T::<span class="keyword">operator</span>+=(<span class="keyword">const</span> T&amp;b)&#123;</span><br><span class="line">    val += b.val;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">T T::<span class="keyword">operator</span>+(<span class="keyword">const</span> T&amp;b)<span class="keyword">const</span>&#123;</span><br><span class="line">    T _copy = *<span class="keyword">this</span>; <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    _copy += b;</span><br><span class="line">    <span class="keyword">return</span> _copy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br><span class="line">copying <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第二种方式</span></span><br><span class="line">T T::<span class="keyword">operator</span>+(<span class="keyword">const</span> T&amp;b)<span class="keyword">const</span>&#123;</span><br><span class="line">    <span class="comment">//return T(val+b.val); //调用构造函数，另一种写法</span></span><br><span class="line">    T _copy = *<span class="keyword">this</span>; <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    _copy.val += b.val;</span><br><span class="line">    <span class="keyword">return</span> _copy;</span><br><span class="line">&#125;</span><br><span class="line">T &amp;T::<span class="keyword">operator</span>+=(<span class="keyword">const</span> T&amp;b)&#123;</span><br><span class="line">    *<span class="keyword">this</span> = *<span class="keyword">this</span> + b; <span class="comment">// 调用构造函数或拷贝构造函数</span></span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">copying <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>从结果看到，第一种情况确实比第二种节约了步骤成本。进一步分析来看，<code>+</code>算术运算符的重载，无论如何都将调用一次构造函数或拷贝构造函数。所以成本的差异体现在<code>+=</code>的重载方式上，第一种方式由于是直接重载<code>+=</code>，过程中不会调用任何构造函数，所以节约了一次构造成本。</p>
-<p>推广到更复杂的情况。如果我们的目的是实现代码的复用及保证一定的代码可读性，第一种方式是首选方式。</p>
-<p>然后需要将第三种方式与前面两种进行比较。第一种方式与第三种方式在例子给出的简单情况中，只有一行代码不同，即<code>+</code>的重载中：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第一种方式：</span><br><span class="line">    _copy += b;</span><br><span class="line"></span><br><span class="line">第三种方式：</span><br><span class="line">    _copy.val += b.val;</span><br></pre></td></tr></table></figure>
-<p>显然，第一种方式在调用<code>+=</code>重载的过程中，会有额外的拷贝或移动开销，虽然在编译器包括返回值优化的各种优化下，这种开销减小，但不是不存在。所以在更复杂的情况下，为了保证效率，应该采用第三种方式，将各个运算符独立重载更优。</p>
-<p>简单地总结一下：</p>
-<p>在简单的模拟情况下，采用第一种方式；而在更复杂的模拟情况下，第三种方式更合适。</p>
-<h2 id="3-临时对象与编译器的优化"><a href="#3-临时对象与编译器的优化" class="headerlink" title="3. 临时对象与编译器的优化"></a>3. 临时对象与编译器的优化</h2><p>问题三中我将要讨论两种优化，返回值优化(RVO)和复制省略(copy elision)。</p>
-<p>这个问题可能和标题有点脱节，但在类似第二个问题的运算符重载的过程中，不可避免地要<code>return</code>一个临时对象，我们也不可避免地像第二个问题一样要讨论它的开销成本。这个问题也作为第二个问题的补充。</p>
-<p>我们考察下面代码（我们可以通过编译时加参数<code>-fno-elide-constructors</code>关闭这两种优化） ：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">T</span>&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    T(<span class="keyword">int</span> va=<span class="number">0</span>):val(va)&#123;<span class="built_in">cout</span> &lt;&lt; <span class="string">"constructing "</span> &lt;&lt;val&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br><span class="line">    T(<span class="keyword">const</span> T &amp;b)&#123;val=b.val;<span class="built_in">cout</span> &lt;&lt; <span class="string">"copying "</span>&lt;&lt;val&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br><span class="line">    T <span class="keyword">operator</span>+(<span class="keyword">const</span> T&amp;)<span class="keyword">const</span>;</span><br><span class="line">    T &amp;<span class="keyword">operator</span>+=(<span class="keyword">const</span> T&amp;);</span><br><span class="line">    ~T()&#123;<span class="built_in">cout</span> &lt;&lt; <span class="string">"destructing "</span>&lt;&lt;val&lt;&lt;<span class="built_in">endl</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">T T::<span class="keyword">operator</span>+(<span class="keyword">const</span> T&amp;b)<span class="keyword">const</span>&#123;</span><br><span class="line">    T _copy = *<span class="keyword">this</span>; <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    _copy += b;</span><br><span class="line">    <span class="keyword">return</span> _copy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    T a = <span class="number">1</span>;</span><br><span class="line">    T b = <span class="number">2</span>;</span><br><span class="line">    T c = a+b;</span><br><span class="line">   	<span class="built_in">cout</span> &lt;&lt; <span class="string">"over"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">关闭优化以后的输出：</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">destructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br><span class="line">copying <span class="number">2</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">copying <span class="number">3</span></span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">copying <span class="number">3</span></span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">destructing <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>先看输出的后半段，在编译器没有进行返回值优化的情况下，我们学过，<code>return _copy</code>时，因为<code>_copy</code>是一个临时对象，会先调用拷贝构造函数用<code>_copy</code>拷贝构造出另一个临时对象，这个临时对象时没有名字的，我们不妨假设为<code>copy1</code>,然后<code>a.operator+()</code>函数退出，<code>_copy</code>被析构，于是总体上说，重载函数返回的是一个没有名字的临时对象。由结果来看，<strong>这个临时对象在完成c的拷贝构造后就析构了</strong>；从拷贝构造函数的参数讲，这个临时对象是有地址的。</p>
-<p>更具体地说，在不开启返回值优化时，函数被编译器处理后的（伪）代码大概如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">T T::<span class="keyword">operator</span>+(T &amp;copy1,<span class="keyword">const</span> T&amp;b)<span class="keyword">const</span>&#123;</span><br><span class="line">    T _copy(*<span class="keyword">this</span>); <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    _copy += b;</span><br><span class="line">    copy1.T::T(_copy); <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">    _copy.T::~T();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>编译器会引入参数<code>T &amp;copy1</code>,该参数用来引用函数要返回的临时对象，更进一步可以看到<code>copy1</code>的<strong>内存地址</strong>和<strong>对应类型</strong>在定义前就已经确定。</p>
-<p>所以没有优化时后半段输出的解释如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">copying <span class="number">1</span> </span><br><span class="line">copying <span class="number">3</span>       <span class="comment">//copy1被拷贝构造</span></span><br><span class="line">destructing <span class="number">3</span>   <span class="comment">//_copy被析构</span></span><br><span class="line">copying <span class="number">3</span>       <span class="comment">//c被拷贝构造</span></span><br><span class="line">destructing <span class="number">3</span>	<span class="comment">//copy1被析构</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span>   <span class="comment">//c被析构</span></span><br><span class="line">destructing <span class="number">2</span>	<span class="comment">//b被析构</span></span><br><span class="line">destructing <span class="number">1</span>	<span class="comment">//a被析构</span></span><br></pre></td></tr></table></figure>
-<p>而开启返回值优化后，后半段输出如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">开启优化时输出：</span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">destructing <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>要具体解释要先理解返回值优化的原理。</p>
-<p><strong>返回值优化(RVO)</strong>发生在当编译器识别出了 <code>return</code>后的返回对象类型和函数的返回对象的类型一致时。此时编译器会直接将而这关联在一起，或者说是将<code>return</code>后的返回对象替换为函数的返回对象，这里函数的返回对象是匿名对象，也就是我们这里的<code>copy1</code>。</p>
-<p>优化后编译器处理后的代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T T::<span class="keyword">operator</span>+(T &amp;copy1,<span class="keyword">const</span> T&amp;b)<span class="keyword">const</span>&#123;</span><br><span class="line">    copy1.T::T(*<span class="keyword">this</span>); <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    copy1 += b;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但此时仍不能解释开启优化后的输出。在查阅维基百科时了解到，在不同的编译器版本或编译设置下，RVO的程度可能不同，也可能是用了其它类型的优化。而通过更深的查找资料，我<strong>猜想</strong>这里使用了<code>copy elision</code>优化。</p>
-<p>此时将引入<code>copy elision</code>优化。</p>
-<p><code>copy elision</code>优化是指当用一个临时<code>class</code>对象去初始化同类型的对象时，复制初始化通常优化为直接初始化。</p>
-<p>我没有查到具体怎么实现优化的，但<strong>可能</strong>是下面的方式。</p>
-<p><code>return</code>后的返回对象会直接与被初始化的对象关联，或者说<code>return</code>后的返回对象被直接替换成了要初始化的对象，这里是<code>c</code>.</p>
-<p>所以最终优化后函数(伪)代码应该如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T T::<span class="keyword">operator</span>+(T &amp;c,<span class="keyword">const</span> T&amp;b)<span class="keyword">const</span>&#123;</span><br><span class="line">    c.T::T(*<span class="keyword">this</span>); <span class="comment">//调用拷贝构造函数</span></span><br><span class="line">    c += b;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>所以优化开启后后半段输出的解释如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">开启优化时输出：</span><br><span class="line">copying <span class="number">1</span>       <span class="comment">//c被拷贝构造</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span>	<span class="comment">//c被析构</span></span><br><span class="line">destructing <span class="number">2</span>	</span><br><span class="line">destructing <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<hr>
-<p>为了验证RVO，我也做了非初始化情况的验证。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">将</span><br><span class="line">T c = a+b;</span><br><span class="line">改为</span><br><span class="line">T c;</span><br><span class="line">c = a+b;</span><br><span class="line"></span><br><span class="line">关闭返回值优化后的输出:</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">destructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br><span class="line">copying <span class="number">2</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">constructing <span class="number">0</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">copying <span class="number">3</span></span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">destructing <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">开启返回值优化时:</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br><span class="line">constructing <span class="number">0</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">destructing <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>此时的后半段输出与返回值优化的伪代码完全应证，即：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">constructing <span class="number">0</span> <span class="comment">//c被构造</span></span><br><span class="line">copying <span class="number">1</span>      <span class="comment">//copy1被构造</span></span><br><span class="line">destructing <span class="number">3</span>  <span class="comment">//在复制赋值后copy1被析构</span></span><br><span class="line">over</span><br><span class="line">destructing <span class="number">3</span>  <span class="comment">//c被析构</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line">destructing <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<hr>
-<p>而凭借<code>copy elision</code>的优化原理，我们能解释前半段代码。即：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">优化前：</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">copying <span class="number">1</span></span><br><span class="line">destructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br><span class="line">copying <span class="number">2</span></span><br><span class="line">destructing <span class="number">2</span></span><br><span class="line"></span><br><span class="line">优化后：</span><br><span class="line">constructing <span class="number">1</span></span><br><span class="line">constructing <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<p><code>T a = 1;</code>和 <code>T b = 2;</code>中。1和2被转换为临时的类型为<code>T</code>的对象，触发<code>copy elision</code>优化，拷贝构造被优化为直接构造。</p>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>c++是一个历史悠久的语言，要掌握c++需要不断地练习与查阅，最好是官方文档。国内的博客在近些年来内容水分严重，不尽如人意。在查找资料的过程中，感觉最有用的是维基百科，官方文档和类似《primer c++》之类的书籍，但因为自己查找资料能力的不足，过分相信博客内容，在过程中走了很多弯路，望引以为戒。</p>
-<hr>
-<h2 id="参考文献："><a href="#参考文献：" class="headerlink" title="参考文献："></a>参考文献：</h2><p>[1]Stanley B. Lippman, Josée Lajoie, Barbara E. Moo. C++ Primer,5E[M]. 北京：电子工业出版社，2013</p>
-<p>[2]Stephen C. Dewhurst. C++覆辙录[M]. 北京：人民邮电出版社，2016</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1246,19 +1197,19 @@ p\leftrightarrow q\equiv(p\wedge q)\vee(\neg p\wedge \neg q)\\
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1337,54 +1288,6 @@ p\leftrightarrow q\equiv(p\wedge q)\vee(\neg p\wedge \neg q)\\
   
 
   
-      
-<script type="text/x-mathjax-config">
-
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-      equationNumbers: {
-        autoNumber: 'AMS'
-      }
-    }
-  });
-
-  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
-    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
-      if (data.display) {
-        var next = data.script.nextSibling;
-        while (next && next.nodeName.toLowerCase() === '#text') {
-          next = next.nextSibling;
-        }
-        if (next && next.nodeName.toLowerCase() === 'br') {
-          next.parentNode.removeChild(next);
-        }
-      }
-    });
-  });
-
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for (i = 0; i < all.length; i += 1) {
-      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
-      if (element.nodeName.toLowerCase() == 'li') {
-        element = element.parentNode;
-      }
-      element.classList.add('has-jax');
-    }
-  });
-</script>
-<script>
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
-    MathJax.Hub.Typeset();
-  }, window.MathJax);
-</script>
-
-    
 
   
 
